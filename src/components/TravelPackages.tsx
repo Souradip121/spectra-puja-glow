@@ -113,15 +113,15 @@ const TravelPackages = () => {
               size="lg"
               onClick={() => window.open(packages[0].image, "_blank")}
             >
-              Book Now
+              View Now
             </Button>
           </div>
 
-          <div className="md:w-1/2 w-[30%]">
+          <div className="md:w-1/2 w-full">
             <img
               src={packages[0].image}
               alt={packages[0].title}
-              className="object-cover max-h-[400px]"
+              className="w-full h-full object-cover min-h-[400px] md:min-h-[500px]"
             />
           </div>
         </Card>
@@ -172,7 +172,7 @@ const TravelPackages = () => {
                     size="lg"
                     onClick={() => window.open(pkg.image, "_blank")}
                   >
-                    Book Now
+                    View Now
                   </Button>
                 </CardContent>
               </Card>
