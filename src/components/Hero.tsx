@@ -24,12 +24,11 @@ const Hero = () => {
 
       {/* Main content */}
       <div className="container mx-auto px-4 pt-20 sm:pt-32 pb-16 sm:pb-20 text-center relative z-10">
-
         <div className="max-w-4xl mx-auto animate-fade-up space-y-6">
           {/* Badge */}
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-card/80 backdrop-blur-sm border border-primary/20">
             <span className="text-sm font-medium text-primary">
-              Official Travel Partner - xyz
+              Official Travel Partner - massArt
             </span>
           </div>
 

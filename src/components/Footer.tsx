@@ -1,3 +1,5 @@
+import logoImg from "@/assets/logo.jpg";
+
 const Footer = () => {
   return (
     <footer>
@@ -8,15 +10,19 @@ const Footer = () => {
           {/* Logo & About */}
           <div className="space-y-6">
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center">
-                <span className="text-background font-bold text-xl">D</span>
+              <div className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center">
+                <img
+                  src={logoImg}
+                  alt="Durga Puja Logo"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div>
                 <h3 className="text-xl font-bold bg-primary bg-clip-text text-transparent">
-                  DURGA PUJA
+                  SPECTRA
                 </h3>
                 <p className="text-xs text-muted-foreground">
-                  Official Travel Partner
+                 
                 </p>
               </div>
             </div>
@@ -223,7 +229,7 @@ const Footer = () => {
                   rel="noopener noreferrer"
                   className="text-primary hover:underline hover:cursor-pointer"
                 >
-                  xyz
+                  massArt
                 </a>
               </p>
             </div>
