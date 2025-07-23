@@ -6,16 +6,7 @@ const Footer = () => {
         <div className="border-t border-primary/10 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-center md:text-left text-muted-foreground text-sm">
-              <p>© 2025 Durga Puja Art 2025. All rights reserved.</p>
-              <p>
-                Official Travel Partner -{" "}
-                <a
-                  rel="noopener noreferrer"
-                  className="text-primary hover:underline hover:cursor-pointer"
-                >
-                  massArt
-                </a>
-              </p>
+              <p>© 2025 Spectra</p>
             </div>
             <div>
               <a href="#home">

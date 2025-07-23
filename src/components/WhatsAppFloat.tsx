@@ -1,12 +1,15 @@
-import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import whatsappIcon from "@/assets/whatsapp-icon.png";
 
 const WhatsAppFloat = () => {
   const handleWhatsAppClick = () => {
     const phoneNumber = "918420797474";
-    const message = "Hi! I'm interested in your Durga Puja travel packages. Please share more details.";
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+    const message =
+      "Hi! I'm interested in your Durga Puja travel packages. Please share more details.";
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+      message
+    )}`;
+    window.open(whatsappUrl, "_blank");
   };
 
   return (
@@ -14,9 +17,13 @@ const WhatsAppFloat = () => {
       <Button
         onClick={handleWhatsAppClick}
         size="lg"
-        className="rounded-full w-16 h-16 bg-green-500 hover:bg-green-600 shadow-lg hover:shadow-xl transition-all duration-300 group"
+        className="rounded-full w-16 h-16 bg-transparent hover:bg-transparent shadow-lg hover:shadow-xl transition-all duration-300 group p-0"
       >
-        <MessageCircle className="h-8 w-8 text-white group-hover:scale-110 transition-transform" />
+        <img
+          src={whatsappIcon}
+          alt="WhatsApp"
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform"
+        />
       </Button>
     </div>
   );
