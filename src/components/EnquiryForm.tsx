@@ -161,7 +161,7 @@ const EnquiryForm = () => {
                         Tour Packages
                       </SelectItem>
                       <SelectItem value="cruising-through-puja">
-                        Cruising Through Puja
+                        Cruising Into Puja
                       </SelectItem>
                       <SelectItem value="durga-preview-express">
                         Durga Preview Express

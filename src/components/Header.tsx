@@ -18,7 +18,7 @@ const Header = () => {
         <div className="flex items-center justify-between md:justify-between">
           {/* Logo */}
           <div className="flex items-center space-x-2 md:flex-1 md:justify-start justify-center absolute left-1/2 transform -translate-x-1/2 md:relative md:left-auto md:transform-none">
-            <img src={spectраlogo} alt="Spectra" className="h-12 w-auto" />
+            <img src={spectраlogo} alt="Spectra" className="h-14 w-auto" />
           </div>
 
           {/* Desktop Navigation */}

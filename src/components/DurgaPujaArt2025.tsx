@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import cruisingintopujaImg from "@/assets/cruisingintopuja.png";
 import durgapujaexpressImg from "@/assets/durgapujaexpress.png";
+import riverCruiseImg from "@/assets/river-cruise.jpg";
+import previewExpressDisplayImg from "@/assets/previewexpressdisplay.png";
 
 const DurgaPujaArt2025 = () => {
   const packages = [
@@ -13,6 +15,7 @@ const DurgaPujaArt2025 = () => {
         "A river cruise with performances, stories & a Bengali lunch.",
       ],
       image: cruisingintopujaImg,
+      displayImage: riverCruiseImg,
     },
     {
       title: "DURGA PREVIEW EXPRESS",
@@ -20,9 +23,10 @@ const DurgaPujaArt2025 = () => {
       description:
         "An exclusive overnight bus tour of Kolkata's 10 finest Durga Puja installations.",
       features: [
-        "Hooghly River cruise, Heritage tour included, Cultural performances, Traditional Bengali lunch",
+        "Heritage tour included, Cultural performances, Traditional Bengali lunch",
       ],
       image: durgapujaexpressImg,
+      displayImage: previewExpressDisplayImg,
     },
   ];
 
@@ -80,7 +84,7 @@ const DurgaPujaArt2025 = () => {
                   <Button
                     className="w-full bg-durga-gold hover:bg-durga-gold/90 text-white"
                     size="lg"
-                    onClick={() => window.open(pkg.image, "_blank")}
+                    onClick={() => window.open(pkg.displayImage, "_blank")}
                   >
                     View Now
                   </Button>
