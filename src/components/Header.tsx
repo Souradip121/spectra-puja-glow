@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import spectराlogo from "@/assets/logolarge.jpg";
+import spectраlogo from "@/assets/logolarge.jpg";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,7 +18,7 @@ const Header = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            <img src={spectराlogo} alt="Spectra" className="h-12 w-auto" />
+            <img src={spectраlogo} alt="Spectra" className="h-12 w-auto" />
           </div>
 
           {/* Desktop Navigation */}
@@ -40,6 +40,12 @@ const Header = () => {
               className="text-foreground hover:text-primary transition-colors"
             >
               Tour Packages
+            </a>
+            <a
+              href="#durga-puja-art"
+              className="text-foreground hover:text-primary transition-colors"
+            >
+              Durga Puja Art 2025
             </a>
             <a
               href="#services"
@@ -93,6 +99,13 @@ const Header = () => {
               onClick={() => setIsMenuOpen(false)}
             >
               Travel Packages
+            </a>
+            <a
+              href="#durga-puja-art"
+              className="block text-foreground hover:text-primary transition-colors"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Durga Puja Art 2025
             </a>
             <a
               href="#services"
