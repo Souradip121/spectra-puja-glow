@@ -73,7 +73,6 @@ const TravelPackages = () => {
 
                 <CardHeader className="text-center pt-4 pb-2">
                   <div className="text-sm text-durga-red flex items-center justify-center">
-                    <Calendar className="h-4 w-4 mr-1" />
                     {pkg.dates}
                   </div>
                 </CardHeader>

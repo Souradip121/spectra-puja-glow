@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Calendar, Users, MapPin } from "lucide-react";
+import { Users, MapPin } from "lucide-react";
 import heritagePujaImg from "@/assets/heritage-puja.jpg";
 import riverCruiseImg from "@/assets/river-cruise.jpg";
 
@@ -69,7 +69,6 @@ const DurgaPujaArt2025 = () => {
                     <IconComponent className="h-6 w-6 text-durga-gold" />
                   </div>
                   <div className="text-sm text-durga-red flex items-center justify-center">
-                    <Calendar className="h-4 w-4 mr-1" />
                     {pkg.dates}
                   </div>
                 </CardHeader>
