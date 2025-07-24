@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import spectराlogo from "@/assets/spectra-logo.png";
+import spectराlogo from "@/assets/logolarge.jpg";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -23,39 +23,36 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#home" className="text-foreground hover:text-primary transition-colors">
+            <a
+              href="#home"
+              className="text-foreground hover:text-primary transition-colors"
+            >
               Home
             </a>
-            <a href="#about" className="text-foreground hover:text-primary transition-colors">
+            <a
+              href="#about"
+              className="text-foreground hover:text-primary transition-colors"
+            >
               About Us
             </a>
-            <a href="#packages" className="text-foreground hover:text-primary transition-colors">
+            <a
+              href="#packages"
+              className="text-foreground hover:text-primary transition-colors"
+            >
               Travel Packages
             </a>
-            <a href="#services" className="text-foreground hover:text-primary transition-colors">
+            <a
+              href="#services"
+              className="text-foreground hover:text-primary transition-colors"
+            >
               Services
             </a>
-            <a href="#contact" className="text-foreground hover:text-primary transition-colors">
+            <a
+              href="#contact"
+              className="text-foreground hover:text-primary transition-colors"
+            >
               Contact
             </a>
-            
-            {/* Phone Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="bg-background border-border">
-                  <Phone className="h-4 w-4 mr-2" />
-                  Phone
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="bg-background border-border">
-                <DropdownMenuItem>
-                  <span className="font-medium">8420797474</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span className="text-sm text-muted-foreground">Call for instant booking</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -65,43 +62,47 @@ const Header = () => {
             className="md:hidden"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {isMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
           </Button>
         </div>
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <nav className="md:hidden mt-4 pb-4 space-y-4">
-            <a 
-              href="#home" 
+            <a
+              href="#home"
               className="block text-foreground hover:text-primary transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               Home
             </a>
-            <a 
-              href="#about" 
+            <a
+              href="#about"
               className="block text-foreground hover:text-primary transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               About Us
             </a>
-            <a 
-              href="#packages" 
+            <a
+              href="#packages"
               className="block text-foreground hover:text-primary transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               Travel Packages
             </a>
-            <a 
-              href="#services" 
+            <a
+              href="#services"
               className="block text-foreground hover:text-primary transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               Services
             </a>
-            <a 
-              href="#contact" 
+            <a
+              href="#contact"
               className="block text-foreground hover:text-primary transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
@@ -109,7 +110,9 @@ const Header = () => {
             </a>
             <div className="pt-4 border-t border-border">
               <p className="text-sm font-medium">Phone: 8420797474</p>
-              <p className="text-xs text-muted-foreground">Call for instant booking</p>
+              <p className="text-xs text-muted-foreground">
+                Call for instant booking
+              </p>
             </div>
           </nav>
         )}
