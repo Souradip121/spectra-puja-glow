@@ -15,9 +15,9 @@ const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-b border-border z-50">
       <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between md:justify-between">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 md:flex-1 md:justify-start justify-center absolute left-1/2 transform -translate-x-1/2 md:relative md:left-auto md:transform-none">
             <img src={spectраlogo} alt="Spectra" className="h-12 w-auto" />
           </div>
 
@@ -65,7 +65,7 @@ const Header = () => {
           <Button
             variant="ghost"
             size="sm"
-            className="md:hidden"
+            className="md:hidden relative z-10"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? (
@@ -121,12 +121,7 @@ const Header = () => {
             >
               Contact
             </a>
-            <div className="pt-4 border-t border-border">
-              <p className="text-sm font-medium">Phone: 8420797474</p>
-              <p className="text-xs text-muted-foreground">
-                Call for instant booking
-              </p>
-            </div>
+            
           </nav>
         )}
       </div>

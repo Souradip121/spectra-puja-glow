@@ -25,11 +25,11 @@ const Contact = () => {
                 Office Address
               </h3>
               <p className="text-sm text-muted-foreground">
-                123 Park Street
+                12/3 Hindustan Road
                 <br />
                 Kolkata, West Bengal
                 <br />
-                700016, India
+                700029, India
               </p>
             </CardContent>
           </Card>
@@ -41,9 +41,26 @@ const Contact = () => {
               </div>
               <h3 className="font-semibold text-durga-red mb-2">Contact</h3>
               <p className="text-sm text-muted-foreground">
-                mail@spectrainfo.in
+                <a
+                  href="mailto:mail@spectrainfo.in"
+                  className="text-primary hover:underline"
+                >
+                  mail@spectrainfo.in
+                </a>
                 <br />
-                8420797474
+                <a
+                  href="tel:7980839680"
+                  className="text-primary hover:underline"
+                >
+                  7980839680
+                </a>
+                <br />
+                <a
+                  href="tel:8420797474"
+                  className="text-primary hover:underline"
+                >
+                  8420797474
+                </a>
               </p>
             </CardContent>
           </Card>
