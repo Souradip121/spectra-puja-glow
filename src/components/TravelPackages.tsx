@@ -10,13 +10,9 @@ const TravelPackages = () => {
     {
       title: "3 Nights & 4 Days",
       dates: "18-22 September 2025",
-      description:
-        "Experience the magic of Durga Puja through Spectra's specially curated guided Art Tours.",
       features: [
-        "VIP access to 24 Durga Puja Art installations Bonedi Bari tour",
-        "Daytime cultural showcases",
-        "Handpicked Culinary experiences",
-        "Premium Accommodation and Private Transport",
+        "An extensive cultural deep dive into durga puja and kolkata's soul",
+        "Passionate Art and heritage enthusiasts looking for immersive storytelling",
       ],
       image: durgaExpressImg,
       pdf: "/pdfs/3n.pdf",
@@ -24,13 +20,9 @@ const TravelPackages = () => {
     {
       title: "2 Nights & 3 Days",
       dates: "18-22 September 2025",
-      description:
-        "Experience the magic of Durga Puja through Spectra's specially curated guided Art Tours.",
       features: [
-        "VIP access to 24 Durga Puja Art installations Bonedi Bari tour",
-        "Daytime cultural showcases",
-        "Handpicked Culinary experiences",
-        "Premium Accommodation and Private Transport",
+        "Well-rounded journey blending Art, tradition and curated experiences",
+        "Curious travelers balancing time with a love for culture and tradition",
       ],
       image: durgaExpressImg,
       pdf: "/pdfs/2n.pdf",
@@ -38,13 +30,9 @@ const TravelPackages = () => {
     {
       title: "1 Night & 2 Days",
       dates: "18-22 September 2025",
-      description:
-        "Experience the magic of Durga Puja through Spectra's specially curated guided Art Tours.",
       features: [
-        "VIP access to 24 Durga Puja Art installations Bonedi Bari tour",
-        "Daytime cultural showcases",
-        "Handpicked Culinary experiences",
-        "Premium Accommodation and Private Transport",
+        "A quick yet immersive glimpse into kolkata's artistic celebrations",
+        "Urban explorers, seeking a guided puja experience",
       ],
       image: durgaExpressImg,
       pdf: "/pdfs/1n.pdf",
@@ -119,9 +107,6 @@ const TravelPackages = () => {
 
                 <CardContent className="px-4 pb-4 flex flex-col justify-between flex-1">
                   <div>
-                    <p className="text-sm text-muted-foreground text-center mb-3">
-                      {pkg.description}
-                    </p>
                     <ul className="space-y-1 mb-4 text-sm">
                       {pkg.features.map((feature, idx) => (
                         <li key={idx} className="flex items-center">
@@ -205,5 +190,6 @@ const TravelPackages = () => {
     </section>
   );
 };
+
 
 export default TravelPackages;
