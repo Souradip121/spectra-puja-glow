@@ -6,6 +6,7 @@ import TravelPackages from "@/components/TravelPackages";
 import DurgaPujaArt2025 from "@/components/DurgaPujaArt2025";
 import TourPointers from "@/components/TourPointers";
 import EnquiryForm from "@/components/EnquiryForm";
+import Gallery from "@/components/Gallery";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
@@ -21,6 +22,7 @@ const Index = () => {
       <DurgaPujaArt2025 />
       <TourPointers />
       <EnquiryForm />
+      <Gallery />
       <Contact />
       <Footer />
       <WhatsAppFloat />
