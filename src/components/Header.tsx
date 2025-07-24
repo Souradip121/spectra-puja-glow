@@ -39,7 +39,7 @@ const Header = () => {
               href="#packages"
               className="text-foreground hover:text-primary transition-colors"
             >
-              Travel Packages
+              Tour Packages
             </a>
             <a
               href="#services"

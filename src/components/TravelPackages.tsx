@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Calendar, Clock, Users, MapPin } from "lucide-react";
+import { Calendar, Users, MapPin } from "lucide-react";
 import durgaExpressImg from "@/assets/durga-express.jpg";
 import heritagePujaImg from "@/assets/heritage-puja.jpg";
 import riverCruiseImg from "@/assets/river-cruise.jpg";
@@ -18,7 +18,6 @@ const TravelPackages = () => {
         "Handpicked Culinary experiences",
         "Premium Accommodation and Private Transport",
       ],
-      icon: Clock,
       image: durgaExpressImg,
       pdf: "/pdfs/3n.pdf",
     },
@@ -33,7 +32,6 @@ const TravelPackages = () => {
         "Handpicked Culinary experiences",
         "Premium Accommodation and Private Transport",
       ],
-      icon: Clock,
       image: durgaExpressImg,
       pdf: "/pdfs/2n.pdf",
     },
@@ -48,7 +46,6 @@ const TravelPackages = () => {
         "Handpicked Culinary experiences",
         "Premium Accommodation and Private Transport",
       ],
-      icon: Clock,
       image: durgaExpressImg,
       pdf: "/pdfs/1n.pdf",
     },
@@ -86,7 +83,7 @@ const TravelPackages = () => {
       <div className="container mx-auto max-w-screen-lg px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-foreground mb-4">
-            Exclusive Travel Packages
+            Tour Packages
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Choose your perfect Durga Puja experience with our specially curated
@@ -97,7 +94,6 @@ const TravelPackages = () => {
         {/* Main packages row */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {mainPackages.map((pkg, index) => {
-            const IconComponent = pkg.icon;
             return (
               <Card
                 key={index}
@@ -115,9 +111,6 @@ const TravelPackages = () => {
                 </div>
 
                 <CardHeader className="text-center pt-4 pb-2">
-                  <div className="inline-flex items-center justify-center w-10 h-10 bg-durga-gold/10 rounded-full mb-2 mx-auto">
-                    <IconComponent className="h-5 w-5 text-durga-gold" />
-                  </div>
                   <div className="text-sm text-durga-red flex items-center justify-center">
                     <Calendar className="h-4 w-4 mr-1" />
                     {pkg.dates}
@@ -143,7 +136,7 @@ const TravelPackages = () => {
                     size="lg"
                     onClick={() => window.open(pkg.pdf, "_blank")}
                   >
-                    {pkg.title}
+                    Get Info
                   </Button>
                 </CardContent>
               </Card>
