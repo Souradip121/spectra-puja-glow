@@ -1,7 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Calendar } from "lucide-react";
-import durgaExpressImg from "@/assets/durga-express.jpg";
+import img1n2d from "@/assets/1n2d.jpg";
+import img2n3d from "@/assets/2n3d.jpg";
+import img3n4d from "@/assets/3n4d.jpg";
 
 const TravelPackages = () => {
   const mainPackages = [
@@ -12,7 +14,7 @@ const TravelPackages = () => {
         "An extensive cultural deep dive into durga puja and kolkata's soul",
         "Passionate Art and heritage enthusiasts looking for immersive storytelling",
       ],
-      image: durgaExpressImg,
+      image: img3n4d,
       pdf: "/pdfs/3n.pdf",
     },
     {
@@ -22,7 +24,7 @@ const TravelPackages = () => {
         "Well-rounded journey blending Art, tradition and curated experiences",
         "Curious travelers balancing time with a love for culture and tradition",
       ],
-      image: durgaExpressImg,
+      image: img2n3d,
       pdf: "/pdfs/2n.pdf",
     },
     {
@@ -32,7 +34,7 @@ const TravelPackages = () => {
         "A quick yet immersive glimpse into kolkata's artistic celebrations",
         "Urban explorers, seeking a guided puja experience",
       ],
-      image: durgaExpressImg,
+      image: img1n2d,
       pdf: "/pdfs/1n.pdf",
     },
   ];
@@ -105,4 +107,3 @@ const TravelPackages = () => {
 };
 
 export default TravelPackages;
-                

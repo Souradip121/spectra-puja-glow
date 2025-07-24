@@ -40,7 +40,8 @@ const DurgaPujaArt2025 = () => {
             Durga Puja Art 2025
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Experience the world's biggest public art festival through our specialized tours and cruises.
+            Experience the world's biggest public art festival through our
+            specialized tours and cruises.
           </p>
         </div>
 
