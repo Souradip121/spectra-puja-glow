@@ -4,7 +4,8 @@ const Hero = () => {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-background"
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
+      style={{ backgroundColor: "#424242" }}
     >
       {/* Gradient background overlay */}
       <div className="absolute inset-0 opacity-10 z-0">
