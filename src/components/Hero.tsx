@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import HeroImage from "@/assets/Hero.png";
 
 const Hero = () => {
   return (
@@ -26,7 +27,7 @@ const Hero = () => {
           {/* Hero Image */}
           <div className="w-full flex justify-center -mt-6">
             <img
-              src="/src/assets/Hero.png"
+              src={HeroImage}
               alt="Durga Puja Art 2025"
               className="w-full max-w-4xl h-auto object-contain"
             />
@@ -36,5 +37,4 @@ const Hero = () => {
     </section>
   );
 };
-
 export default Hero;
