@@ -28,7 +28,8 @@ const Hero = () => {
           {/* Badge */}
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-card/80 backdrop-blur-sm border border-primary/20">
             <span className="text-sm font-medium text-primary">
-              Official Travel Partner - massArt
+              Official Travel Partner for{" "}
+              <span style={{ color: "#FF3D00" }}>massArt</span>
             </span>
           </div>
 
