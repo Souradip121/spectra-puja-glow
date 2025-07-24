@@ -8,7 +8,7 @@ import riverCruiseImg from "@/assets/river-cruise.jpg";
 const TravelPackages = () => {
   const mainPackages = [
     {
-      title: "1 Night & 2 Days",
+      title: "3 Nights & 4 Days",
       dates: "18-22 September 2025",
       description:
         "Experience the magic of Durga Puja through Spectra's specially curated guided Art Tours.",
@@ -20,7 +20,7 @@ const TravelPackages = () => {
       ],
       icon: Clock,
       image: durgaExpressImg,
-      pdf: "/pdfs/1n.pdf",
+      pdf: "/pdfs/3n.pdf",
     },
     {
       title: "2 Nights & 3 Days",
@@ -38,7 +38,7 @@ const TravelPackages = () => {
       pdf: "/pdfs/2n.pdf",
     },
     {
-      title: "3 Nights & 4 Days",
+      title: "1 Night & 2 Days",
       dates: "18-22 September 2025",
       description:
         "Experience the magic of Durga Puja through Spectra's specially curated guided Art Tours.",
@@ -50,7 +50,7 @@ const TravelPackages = () => {
       ],
       icon: Clock,
       image: durgaExpressImg,
-      pdf: "/pdfs/3n.pdf",
+      pdf: "/pdfs/1n.pdf",
     },
   ];
 
@@ -143,7 +143,7 @@ const TravelPackages = () => {
                     size="lg"
                     onClick={() => window.open(pkg.pdf, "_blank")}
                   >
-                    View Now
+                    {pkg.title}
                   </Button>
                 </CardContent>
               </Card>
