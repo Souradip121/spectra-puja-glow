@@ -6,9 +6,9 @@ import heritagePujaImg from "@/assets/heritage-puja.jpg";
 import riverCruiseImg from "@/assets/river-cruise.jpg";
 
 const TravelPackages = () => {
-  const packages = [
+  const mainPackages = [
     {
-      title: "Exclusive Travel Packages",
+      title: "1 Night & 2 Days",
       dates: "18-22 September 2025",
       description:
         "Experience the magic of Durga Puja through Spectra's specially curated guided Art Tours.",
@@ -20,7 +20,41 @@ const TravelPackages = () => {
       ],
       icon: Clock,
       image: durgaExpressImg,
+      pdf: "/pdfs/1n.pdf",
     },
+    {
+      title: "2 Nights & 3 Days",
+      dates: "18-22 September 2025",
+      description:
+        "Experience the magic of Durga Puja through Spectra's specially curated guided Art Tours.",
+      features: [
+        "VIP access to 24 Durga Puja Art installations Bonedi Bari tour",
+        "Daytime cultural showcases",
+        "Handpicked Culinary experiences",
+        "Premium Accommodation and Private Transport",
+      ],
+      icon: Clock,
+      image: durgaExpressImg,
+      pdf: "/pdfs/2n.pdf",
+    },
+    {
+      title: "3 Nights & 4 Days",
+      dates: "18-22 September 2025",
+      description:
+        "Experience the magic of Durga Puja through Spectra's specially curated guided Art Tours.",
+      features: [
+        "VIP access to 24 Durga Puja Art installations Bonedi Bari tour",
+        "Daytime cultural showcases",
+        "Handpicked Culinary experiences",
+        "Premium Accommodation and Private Transport",
+      ],
+      icon: Clock,
+      image: durgaExpressImg,
+      pdf: "/pdfs/3n.pdf",
+    },
+  ];
+
+  const packages = [
     {
       title: "CRUISING INTO PUJA -A MAHALAYA SPECIAL",
       dates: "Sunday, 21 September 2025",
@@ -47,8 +81,6 @@ const TravelPackages = () => {
     },
   ];
 
-  const FirstIcon = packages[0].icon;
-
   return (
     <section id="packages" className="py-20 bg-background">
       <div className="container mx-auto max-w-screen-lg px-4">
@@ -62,72 +94,69 @@ const TravelPackages = () => {
           </p>
         </div>
 
-        <Card className="flex flex-col md:flex-row overflow-hidden mb-12 card-tight">
-          <div className="flex-1 p-6 flex flex-col justify-between">
-            <div>
-              <div className="flex items-center justify-start gap-2 mb-3">
-                <div className="inline-flex items-center justify-center w-10 h-10 bg-durga-gold/10 rounded-full">
-                  <FirstIcon className="h-5 w-5 text-durga-gold" />
+        {/* Main packages row */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          {mainPackages.map((pkg, index) => {
+            const IconComponent = pkg.icon;
+            return (
+              <Card
+                key={index}
+                className="flex flex-col overflow-hidden hover:shadow-xl transition-all duration-300"
+              >
+                <div className="relative h-48 w-full overflow-hidden">
+                  <img
+                    src={pkg.image}
+                    alt={pkg.title}
+                    className="w-full h-full object-cover transition-transform duration-300"
+                  />
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <h3 className="text-lg font-bold">{pkg.title}</h3>
+                  </div>
                 </div>
-                <div className="text-sm text-durga-red flex items-center">
-                  <Calendar className="h-4 w-4 mr-1" />
-                  {packages[0].dates}
-                </div>
-              </div>
 
-              <h3 className="text-xl font-bold mb-2">{packages[0].title}</h3>
-              <p className="text-sm text-muted-foreground mb-3">
-                {packages[0].description}
-              </p>
-              <ul className="space-y-1 mb-3 text-sm">
-                {packages[0].features.map((feature, idx) => (
-                  <li key={idx} className="flex items-center">
-                    <div className="w-2 h-2 bg-durga-gold rounded-full mr-2" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
+                <CardHeader className="text-center pt-4 pb-2">
+                  <div className="inline-flex items-center justify-center w-10 h-10 bg-durga-gold/10 rounded-full mb-2 mx-auto">
+                    <IconComponent className="h-5 w-5 text-durga-gold" />
+                  </div>
+                  <div className="text-sm text-durga-red flex items-center justify-center">
+                    <Calendar className="h-4 w-4 mr-1" />
+                    {pkg.dates}
+                  </div>
+                </CardHeader>
 
-              <div className="text-left mb-3">
-                <p className="text-sm font-semibold text-durga-red mb-1">
-                  Pick your journey
-                </p>
-                <p className="text-sm text-durga-gold space-x-2">
-                  <a href="/pdfs/1n.pdf" className="hover:underline">
-                    1 Night & 2 Days
-                  </a>{" "}
-                  |{" "}
-                  <a href="/pdfs/2n.pdf" className="hover:underline">
-                    2 Nights & 3 Days
-                  </a>{" "}
-                  |{" "}
-                  <a href="/pdfs/3n.pdf" className="hover:underline">
-                    3 Nights & 4 Days
-                  </a>
-                </p>
-              </div>
-            </div>
+                <CardContent className="px-4 pb-4 flex flex-col justify-between flex-1">
+                  <div>
+                    <p className="text-sm text-muted-foreground text-center mb-3">
+                      {pkg.description}
+                    </p>
+                    <ul className="space-y-1 mb-4 text-sm">
+                      {pkg.features.map((feature, idx) => (
+                        <li key={idx} className="flex items-center">
+                          <div className="w-2 h-2 bg-durga-gold rounded-full mr-2" />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <Button
+                    className="w-full bg-durga-gold hover:bg-durga-gold/90 text-white mt-auto"
+                    size="lg"
+                    onClick={() => window.open(pkg.pdf, "_blank")}
+                  >
+                    View Now
+                  </Button>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
 
-            <Button
-              className="w-full bg-durga-gold hover:bg-durga-gold/90 text-white mt-2"
-              size="lg"
-              onClick={() => window.open(packages[0].image, "_blank")}
-            >
-              View Now
-            </Button>
-          </div>
+        {/* Subtle divider */}
+        <div className="w-full h-px bg-border mb-12"></div>
 
-          <div className="md:w-1/2 w-full">
-            <img
-              src={packages[0].image}
-              alt={packages[0].title}
-              className="w-full h-full object-cover min-h-[400px] md:min-h-[500px]"
-            />
-          </div>
-        </Card>
-
+        {/* Additional packages row */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {packages.slice(1).map((pkg, index) => {
+          {packages.map((pkg, index) => {
             const IconComponent = pkg.icon;
             return (
               <Card
