@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Users, MapPin } from "lucide-react";
-import heritagePujaImg from "@/assets/heritage-puja.jpg";
-import riverCruiseImg from "@/assets/river-cruise.jpg";
+import cruisingintopujaImg from "@/assets/cruisingintopuja.png";
+import durgapujaexpressImg from "@/assets/durgapujaexpress.png";
 
 const DurgaPujaArt2025 = () => {
   const packages = [
@@ -13,8 +12,7 @@ const DurgaPujaArt2025 = () => {
       features: [
         "A river cruise with performances, stories & a Bengali lunch.",
       ],
-      icon: Users,
-      image: heritagePujaImg,
+      image: cruisingintopujaImg,
     },
     {
       title: "DURGA PREVIEW EXPRESS",
@@ -22,13 +20,9 @@ const DurgaPujaArt2025 = () => {
       description:
         "An exclusive overnight bus tour of Kolkata's 10 finest Durga Puja installations.",
       features: [
-        "Hooghly River cruise",
-        "Heritage tour included",
-        "Cultural performances",
-        "Traditional Bengali lunch",
+        "Hooghly River cruise, Heritage tour included, Cultural performances, Traditional Bengali lunch",
       ],
-      icon: MapPin,
-      image: riverCruiseImg,
+      image: durgapujaexpressImg,
     },
   ];
 
@@ -47,7 +41,6 @@ const DurgaPujaArt2025 = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {packages.map((pkg, index) => {
-            const IconComponent = pkg.icon;
             return (
               <Card
                 key={index}
@@ -57,7 +50,7 @@ const DurgaPujaArt2025 = () => {
                   <img
                     src={pkg.image}
                     alt={pkg.title}
-                    className="w-full h-full object-cover transition-transform duration-300"
+                    className="w-full h-full object-cover object-top transition-transform duration-300"
                   />
                   <div className="absolute bottom-4 left-4 text-white">
                     <h3 className="text-xl font-bold">{pkg.title}</h3>
@@ -65,28 +58,27 @@ const DurgaPujaArt2025 = () => {
                 </div>
 
                 <CardHeader className="text-center pt-4 pb-2">
-                  <div className="inline-flex items-center justify-center w-12 h-12 bg-durga-gold/10 rounded-full mb-2 mx-auto">
-                    <IconComponent className="h-6 w-6 text-durga-gold" />
-                  </div>
                   <div className="text-sm text-durga-red flex items-center justify-center">
                     {pkg.dates}
                   </div>
                 </CardHeader>
 
-                <CardContent className="px-4 pb-4 flex flex-col justify-between">
-                  <p className="text-sm text-muted-foreground text-center mb-2">
-                    {pkg.description}
-                  </p>
-                  <ul className="space-y-1 mb-4 text-sm">
-                    {pkg.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-center">
-                        <div className="w-2 h-2 bg-durga-gold rounded-full mr-2" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
+                <CardContent className="px-4 pb-4 flex flex-col flex-1">
+                  <div className="flex-1">
+                    <p className="text-sm text-muted-foreground text-center mb-2">
+                      {pkg.description}
+                    </p>
+                    <ul className="space-y-1 mb-4 text-sm">
+                      {pkg.features.map((feature, idx) => (
+                        <li key={idx} className="flex items-center">
+                          <div className="w-2 h-2 bg-durga-gold rounded-full mr-2" />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                   <Button
-                    className="w-full bg-durga-gold hover:bg-durga-gold/90 text-white mt-auto"
+                    className="w-full bg-durga-gold hover:bg-durga-gold/90 text-white"
                     size="lg"
                     onClick={() => window.open(pkg.image, "_blank")}
                   >
