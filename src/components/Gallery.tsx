@@ -6,6 +6,8 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Card } from "@/components/ui/card";
+import { type EmblaOptionsType } from "embla-carousel";
+import Autoplay from "embla-carousel-autoplay";
 
 // Import carousel images
 import carousel1 from "@/assets/carousel/1.jpg";
@@ -52,6 +54,12 @@ const Gallery = () => {
 
         <div className="max-w-4xl mx-auto">
           <Carousel
+            plugins={[
+              Autoplay({
+                delay: 5000,
+                stopOnInteraction: false,
+              }),
+            ]}
             opts={{
               align: "start",
               loop: true,
