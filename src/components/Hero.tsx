@@ -15,10 +15,10 @@ const Hero = () => {
       </div>
 
       {/* Main content */}
-      <div className="container mx-auto px-4 pt-20 sm:pt-32 pb-16 sm:pb-20 text-center relative z-10">
+      <div className="container mx-auto px-4 pt-2 sm:pt-32 pb-16 sm:pb-20 text-center relative z-10">
         <div className="max-w-6xl mx-auto animate-fade-up space-y-0">
           {/* Badge */}
-          <div className="inline-flex items-center px-6 py-3">
+          <div className="inline-flex items-center px-6 py-2 sm:py-3">
             <span className="text-base sm:text-lg font-medium text-white">
               Official Travel Partner for{" "}
               <img
