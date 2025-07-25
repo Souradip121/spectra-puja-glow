@@ -172,8 +172,55 @@ const DurgaPujaArt2025 = () => {
           </div>
         </div>
 
+        {/* Main Packages - 3 cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-12">
+          {mainPackages.map((pkg, index) => (
+            <Card
+              key={index}
+              className="flex flex-col overflow-hidden hover:shadow-xl transition-all duration-300"
+            >
+              <div className="relative h-48 w-full overflow-hidden">
+                <img
+                  src={pkg.image}
+                  alt={pkg.title}
+                  className="w-full h-full object-cover transition-transform duration-300"
+                />
+                <div className="absolute bottom-4 left-4 text-white">
+                  <h3 className="text-lg font-bold">{pkg.title}</h3>
+                </div>
+              </div>
+
+              <CardHeader className="text-center pt-4 pb-2">
+                <div className="text-sm text-durga-red flex items-center justify-center">
+                  {pkg.dates}
+                </div>
+              </CardHeader>
+
+              <CardContent className="px-4 pb-4 flex flex-col justify-between flex-1">
+                <div>
+                  <ul className="space-y-1 mb-4 text-sm">
+                    {pkg.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-center">
+                        <div className="w-2 h-2 bg-durga-gold rounded-full mr-2" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <Button
+                  className="w-full bg-durga-gold hover:bg-durga-gold/90 text-white mt-auto"
+                  size="lg"
+                  onClick={() => window.open(pkg.pdf, "_blank")}
+                >
+                  Get Info
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
         {/* Special Packages - 2 cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {specialPackages.map((pkg, index) => (
             <Card
               key={index}
@@ -216,53 +263,6 @@ const DurgaPujaArt2025 = () => {
                   onClick={() => window.open(pkg.displayImage, "_blank")}
                 >
                   View Now
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Main Packages - 3 cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {mainPackages.map((pkg, index) => (
-            <Card
-              key={index}
-              className="flex flex-col overflow-hidden hover:shadow-xl transition-all duration-300"
-            >
-              <div className="relative h-48 w-full overflow-hidden">
-                <img
-                  src={pkg.image}
-                  alt={pkg.title}
-                  className="w-full h-full object-cover transition-transform duration-300"
-                />
-                <div className="absolute bottom-4 left-4 text-white">
-                  <h3 className="text-lg font-bold">{pkg.title}</h3>
-                </div>
-              </div>
-
-              <CardHeader className="text-center pt-4 pb-2">
-                <div className="text-sm text-durga-red flex items-center justify-center">
-                  {pkg.dates}
-                </div>
-              </CardHeader>
-
-              <CardContent className="px-4 pb-4 flex flex-col justify-between flex-1">
-                <div>
-                  <ul className="space-y-1 mb-4 text-sm">
-                    {pkg.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-center">
-                        <div className="w-2 h-2 bg-durga-gold rounded-full mr-2" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <Button
-                  className="w-full bg-durga-gold hover:bg-durga-gold/90 text-white mt-auto"
-                  size="lg"
-                  onClick={() => window.open(pkg.pdf, "_blank")}
-                >
-                  Get Info
                 </Button>
               </CardContent>
             </Card>
