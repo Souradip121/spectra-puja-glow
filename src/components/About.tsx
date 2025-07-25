@@ -1,43 +1,52 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Award, Users, MapPin, Star, Shield, Globe } from "lucide-react";
+import {
+  Award,
+  Users,
+  MapPin,
+  Star,
+  Shield,
+  Globe,
+  Heart,
+  Handshake,
+} from "lucide-react";
 
 const About = () => {
   const features = [
     {
-      icon: Shield,
-      title: "Exclusive Access",
+      icon: Award,
+      title: "Official Travel Partner",
       description:
-        "VIP access to premium Durga Puja installations and heritage locations",
+        "Official Travel Partner of massArt – Get exclusive access to world biggest public Art festival - Durga Puja.",
+    },
+    {
+      icon: Heart,
+      title: "Personal Touch",
+      description:
+        "From airport pickup to bedtime chai, we plan every detail like a friend would.",
     },
     {
       icon: Users,
-      title: "Expert Guides",
+      title: "Beyond Sightseeing",
       description:
-        "Local cultural experts who bring stories and traditions to life",
+        "You won't just see Durga Puja Art, you'll meet the Artisans and team behind these installations.",
+    },
+    {
+      icon: Shield,
+      title: "Trusted Partners",
+      description:
+        "Heritage 5 Star Hotels, reliable Transportation and Culinary partners who love what they serve.",
     },
     {
       icon: Star,
-      title: "Authentic Experiences",
+      title: "Designed for All",
       description:
-        "Genuine cultural immersion with traditional ceremonies and cuisine",
+        "Whether you're a family or a group of friends—we make it magical.",
     },
     {
-      icon: Award,
-      title: "Premium Comfort",
+      icon: Handshake,
+      title: "Experience Meets Purpose",
       description:
-        "Carefully selected accommodations and private transportation",
-    },
-    {
-      icon: MapPin,
-      title: "Small Groups",
-      description:
-        "Intimate group sizes for personalized attention and experience",
-    },
-    {
-      icon: Globe,
-      title: "Cultural Insight",
-      description:
-        "Deep dive into Bengali art, history, and spiritual traditions",
+        "Every journey supports local artisans, performers and heritage spaces - travel that gives back.",
     },
   ];
 
@@ -47,10 +56,17 @@ const About = () => {
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-foreground mb-6">About Us</h2>
           <div className="text-muted-foreground leading-relaxed max-w-3xl mx-auto mb-12">
+            <p className="mb-4">
+              At SPECTRA, we create events and experiences that span a vibrant
+              spectrum of ideas, styles, and formats. There's no
+              one-size-fits-all approach — only fresh, colourful concepts
+              thoughtfully tailored to every occasion.
+            </p>
             <p>
-              At SPECTRA, we create events and experiences that span a spectrum
-              of ideas, styles and formats. No one-size-fits-all just fresh,
-              colourful concepts tailored to every occasion.
+              We're proud to be the official travel partner for the{" "}
+              <strong>Preview Show of Durga Puja Art 2025 by massArt</strong> —
+              a unique cultural initiative that has been partnered with UNESCO
+              for the past three years.
             </p>
           </div>
 
