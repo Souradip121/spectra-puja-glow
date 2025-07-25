@@ -145,29 +145,58 @@ const DurgaPujaArt2025 = () => {
             <h3 className="text-2xl font-semibold text-foreground mb-6">
               What's Included
             </h3>
-            <div className="space-y-4">
-              {inclusions.map((inclusion, index) => (
-                <Card
-                  key={index}
-                  className="bg-background border-border hover:shadow-md transition-shadow"
-                >
-                  <CardContent className="p-4">
-                    <div className="flex items-start space-x-4">
-                      <div className="inline-flex items-center justify-center w-10 h-10 bg-primary/10 rounded-lg flex-shrink-0">
-                        <inclusion.icon className="h-5 w-5 text-primary" />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              {/* First Column */}
+              <div className="space-y-4">
+                {inclusions.slice(0, 3).map((inclusion, index) => (
+                  <Card
+                    key={index}
+                    className="bg-background border-border hover:shadow-md transition-shadow"
+                  >
+                    <CardContent className="p-4">
+                      <div className="flex items-start space-x-4">
+                        <div className="inline-flex items-center justify-center w-10 h-10 bg-primary/10 rounded-lg flex-shrink-0">
+                          <inclusion.icon className="h-5 w-5 text-primary" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-foreground mb-1 text-sm">
+                            {inclusion.title}
+                          </h4>
+                          <p className="text-muted-foreground text-xs">
+                            {inclusion.description}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="font-semibold text-foreground mb-1 text-sm">
-                          {inclusion.title}
-                        </h4>
-                        <p className="text-muted-foreground text-xs">
-                          {inclusion.description}
-                        </p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {/* Second Column */}
+              <div className="space-y-4">
+                {inclusions.slice(3, 6).map((inclusion, index) => (
+                  <Card
+                    key={index + 3}
+                    className="bg-background border-border hover:shadow-md transition-shadow"
+                  >
+                    <CardContent className="p-4">
+                      <div className="flex items-start space-x-4">
+                        <div className="inline-flex items-center justify-center w-10 h-10 bg-primary/10 rounded-lg flex-shrink-0">
+                          <inclusion.icon className="h-5 w-5 text-primary" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-foreground mb-1 text-sm">
+                            {inclusion.title}
+                          </h4>
+                          <p className="text-muted-foreground text-xs">
+                            {inclusion.description}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </div>
           </div>
         </div>
