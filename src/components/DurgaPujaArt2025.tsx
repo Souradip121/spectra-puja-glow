@@ -146,7 +146,7 @@ const DurgaPujaArt2025 = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* First Column */}
               <div className="flex flex-col space-y-4">
-                {inclusions.slice(0, 5).map((inclusion, index) => (
+                {inclusions.slice(0, 3).map((inclusion, index) => (
                   <Card
                     key={index}
                     className="bg-background border-border hover:shadow-md transition-shadow flex-1"
@@ -172,9 +172,9 @@ const DurgaPujaArt2025 = () => {
 
               {/* Second Column */}
               <div className="flex flex-col space-y-4">
-                {inclusions.slice(5, 10).map((inclusion, index) => (
+                {inclusions.slice(3, 6).map((inclusion, index) => (
                   <Card
-                    key={index + 5}
+                    key={index + 3}
                     className="bg-background border-border hover:shadow-md transition-shadow flex-1"
                   >
                     <CardContent className="p-4 h-full flex flex-col">
