@@ -32,7 +32,8 @@ const DurgaPujaArt2025 = () => {
   const mainPackages = [
     {
       title: "3 Nights & 4 Days",
-      installations: "24 contemporary installations, 1 Traditional Puja, 1 Bonedi Bari and Kolkata Townhall Exhibition",
+      installations:
+        "24 contemporary installations, 1 Traditional Puja, 1 Bonedi Bari and Kolkata Townhall Exhibition",
       features: [
         "An extensive cultural deep dive into durga puja and kolkata's soul",
         "Ideal for Passionate Art and heritage enthusiasts looking for immersive storytelling",
@@ -42,7 +43,8 @@ const DurgaPujaArt2025 = () => {
     },
     {
       title: "2 Nights & 3 Days",
-      installations: "15 contemporary installations, 1 Traditional Puja, 1 Bonedi Bari and Kolkata Townhall Exhibition",
+      installations:
+        "15 contemporary installations, 1 Traditional Puja, 1 Bonedi Bari and Kolkata Townhall Exhibition",
       features: [
         "Well-rounded journey blending Art, tradition and curated experiences",
         "For Curious travelers balancing time with a love for culture and tradition",
@@ -52,7 +54,8 @@ const DurgaPujaArt2025 = () => {
     },
     {
       title: "1 Night & 2 Days",
-      installations: "6 contemporary installations, 1 Traditional Puja, 1 Bonedi Bari and Kolkata Townhall Exhibition",
+      installations:
+        "6 contemporary installations, 1 Traditional Puja, 1 Bonedi Bari and Kolkata Townhall Exhibition",
       features: [
         "A quick yet immersive glimpse into Kolkata's artistic celebrations",
         "For anyone seeking a short, guided Durga Puja experience",
@@ -142,18 +145,18 @@ const DurgaPujaArt2025 = () => {
             </h3>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {/* First Column */}
-              <div className="space-y-4">
-                {inclusions.slice(0, 3).map((inclusion, index) => (
+              <div className="flex flex-col space-y-4">
+                {inclusions.slice(0, 5).map((inclusion, index) => (
                   <Card
                     key={index}
-                    className="bg-background border-border hover:shadow-md transition-shadow"
+                    className="bg-background border-border hover:shadow-md transition-shadow flex-1"
                   >
-                    <CardContent className="p-4">
-                      <div className="flex items-start space-x-4">
+                    <CardContent className="p-4 h-full flex flex-col">
+                      <div className="flex items-start space-x-4 flex-1">
                         <div className="inline-flex items-center justify-center w-10 h-10 bg-primary/10 rounded-lg flex-shrink-0">
                           <inclusion.icon className="h-5 w-5 text-primary" />
                         </div>
-                        <div>
+                        <div className="flex-1">
                           <h4 className="font-semibold text-foreground mb-1 text-sm">
                             {inclusion.title}
                           </h4>
@@ -168,18 +171,18 @@ const DurgaPujaArt2025 = () => {
               </div>
 
               {/* Second Column */}
-              <div className="space-y-4">
-                {inclusions.slice(3, 6).map((inclusion, index) => (
+              <div className="flex flex-col space-y-4">
+                {inclusions.slice(5, 10).map((inclusion, index) => (
                   <Card
-                    key={index + 3}
-                    className="bg-background border-border hover:shadow-md transition-shadow"
+                    key={index + 5}
+                    className="bg-background border-border hover:shadow-md transition-shadow flex-1"
                   >
-                    <CardContent className="p-4">
-                      <div className="flex items-start space-x-4">
+                    <CardContent className="p-4 h-full flex flex-col">
+                      <div className="flex items-start space-x-4 flex-1">
                         <div className="inline-flex items-center justify-center w-10 h-10 bg-primary/10 rounded-lg flex-shrink-0">
                           <inclusion.icon className="h-5 w-5 text-primary" />
                         </div>
-                        <div>
+                        <div className="flex-1">
                           <h4 className="font-semibold text-foreground mb-1 text-sm">
                             {inclusion.title}
                           </h4>
@@ -300,6 +303,3 @@ const DurgaPujaArt2025 = () => {
 };
 
 export default DurgaPujaArt2025;
-
-
-
