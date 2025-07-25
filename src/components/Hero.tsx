@@ -18,10 +18,7 @@ const Hero = () => {
         <div className="max-w-6xl mx-auto animate-fade-up space-y-0">
           {/* Badge */}
           <div className="inline-flex items-center px-6 py-3 rounded-full bg-card/80 backdrop-blur-sm border border-primary/20">
-            <span
-              className="text-base sm:text-lg font-medium text-primary"
-              style={{ fontFamily: "Arial, sans-serif" }}
-            >
+            <span className="text-base sm:text-lg font-medium text-primary">
               Official Travel Partner for{" "}
               <span style={{ color: "#FF3D00" }}>massArt</span>
             </span>

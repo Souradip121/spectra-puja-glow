@@ -36,22 +36,16 @@ const Header = () => {
               About Us
             </a>
             <a
-              href="#packages"
-              className="text-foreground hover:text-primary transition-colors"
-            >
-              Tour Packages
-            </a>
-            <a
               href="#durga-puja-art"
               className="text-foreground hover:text-primary transition-colors"
             >
               Durga Puja Art 2025
             </a>
             <a
-              href="#services"
+              href="#gallery"
               className="text-foreground hover:text-primary transition-colors"
             >
-              Services
+              Gallery
             </a>
             <a
               href="#contact"
@@ -94,13 +88,6 @@ const Header = () => {
               About Us
             </a>
             <a
-              href="#packages"
-              className="block text-foreground hover:text-primary transition-colors"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Travel Packages
-            </a>
-            <a
               href="#durga-puja-art"
               className="block text-foreground hover:text-primary transition-colors"
               onClick={() => setIsMenuOpen(false)}
@@ -108,11 +95,11 @@ const Header = () => {
               Durga Puja Art 2025
             </a>
             <a
-              href="#services"
+              href="#gallery"
               className="block text-foreground hover:text-primary transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
-              Services
+              Gallery
             </a>
             <a
               href="#contact"
@@ -128,5 +115,6 @@ const Header = () => {
     </header>
   );
 };
+              
 
 export default Header;
