@@ -24,6 +24,7 @@ import {
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
+import { DateRange } from "react-day-picker";
 
 const formSchema = z
   .object({
@@ -32,7 +33,10 @@ const formSchema = z
     phone: z.string().min(10, "Phone number is required"),
     interestedTour: z.string().min(1, "Please select a tour"),
     travelPackage: z.string().optional(),
-    travelDate: z.date(),
+    travelDate: z.object({
+      from: z.date(),
+      to: z.date().optional(),
+    }),
     message: z.string().optional(),
   })
   .refine(
@@ -51,7 +55,8 @@ const formSchema = z
 type FormData = z.infer<typeof formSchema>;
 
 const EnquiryForm = () => {
-  const [date, setDate] = useState<Date>();
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const {
     register,
@@ -64,6 +69,7 @@ const EnquiryForm = () => {
   });
 
   const watchedTour = watch("interestedTour");
+  const watchedPackage = watch("travelPackage");
 
   const onSubmit = (data: FormData) => {
     console.log(data);
@@ -73,6 +79,20 @@ const EnquiryForm = () => {
     });
   };
 
+  // Get the number of days based on selected package
+  const getPackageDays = (packageType: string) => {
+    switch (packageType) {
+      case "3n-4d":
+        return 4;
+      case "2n-3d":
+        return 3;
+      case "1n-2d":
+        return 2;
+      default:
+        return 1;
+    }
+  };
+
   // Date restrictions: Only allow September 18-23, 2025
   const isDateDisabled = (date: Date) => {
     const year = date.getFullYear();
@@ -80,7 +100,57 @@ const EnquiryForm = () => {
     const day = date.getDate();
 
     if (year !== 2025 || month !== 8) return true; // September is month 8 (0-based)
-    return day < 18 || day > 23;
+
+    // For tour packages, check if there are enough days remaining
+    if (watchedTour === "tour-packages" && watchedPackage) {
+      const requiredDays = getPackageDays(watchedPackage);
+      const maxAllowedStartDate = 23 - requiredDays + 1;
+
+      if (day < 18 || day > maxAllowedStartDate) return true;
+    } else {
+      if (day < 18 || day > 23) return true;
+    }
+
+    return false;
+  };
+
+  const handleDateSelect = (selectedRange: DateRange | undefined) => {
+    if (!selectedRange?.from) return;
+
+    let range = selectedRange;
+
+    // For tour packages, automatically set the end date based on package duration
+    if (watchedTour === "tour-packages" && watchedPackage) {
+      const days = getPackageDays(watchedPackage);
+      const endDate = new Date(selectedRange.from);
+      endDate.setDate(endDate.getDate() + days - 1);
+
+      range = {
+        from: selectedRange.from,
+        to: endDate,
+      };
+    }
+
+    setDateRange(range);
+    setValue("travelDate", range);
+
+    // Auto-close the calendar after selection
+    if (range.from && (range.to || watchedTour !== "tour-packages")) {
+      setIsCalendarOpen(false);
+    }
+  };
+
+  const formatDateRange = (range: DateRange | undefined) => {
+    if (!range?.from) return "Pick a date";
+
+    if (range.to) {
+      return `${format(range.from, "MMM dd")} - ${format(
+        range.to,
+        "MMM dd, yyyy"
+      )}`;
+    }
+
+    return format(range.from, "PPP");
   };
 
   return (
@@ -180,9 +250,12 @@ const EnquiryForm = () => {
                   <div className="space-y-2">
                     <Label htmlFor="travelPackage">Travel Package *</Label>
                     <Select
-                      onValueChange={(value) =>
-                        setValue("travelPackage", value)
-                      }
+                      onValueChange={(value) => {
+                        setValue("travelPackage", value);
+                        // Reset date range when package changes
+                        setDateRange(undefined);
+                        setValue("travelDate", { from: new Date(), to: undefined });
+                      }}
                     >
                       <SelectTrigger
                         className={
@@ -206,41 +279,54 @@ const EnquiryForm = () => {
                 )}
 
                 <div className="space-y-2">
-                  <Label>Preferred Travel Date * (18-23 September 2025)</Label>
-                  <Popover>
+                  <Label>Preferred Travel Date *</Label>
+                  <Popover
+                    open={isCalendarOpen}
+                    onOpenChange={(open) => {
+                      setIsCalendarOpen(open);
+                      // Reset date selection when calendar opens
+                      if (open) {
+                        setDateRange(undefined);
+                      }
+                    }}
+                  >
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
                         className={cn(
                           "w-full justify-start text-left font-normal",
-                          !date && "text-muted-foreground",
+                          !dateRange?.from && "text-muted-foreground",
                           errors.travelDate && "border-destructive"
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date ? format(date, "PPP") : <span>Pick a date</span>}
+                        {formatDateRange(dateRange)}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <CalendarComponent
-                        mode="single"
-                        selected={date}
-                        onSelect={(selectedDate) => {
-                          setDate(selectedDate);
-                          if (selectedDate) {
-                            setValue("travelDate", selectedDate);
-                          }
-                        }}
+                        mode={
+                          watchedTour === "tour-packages" ? "range" : "single"
+                        }
+                        selected={dateRange}
+                        onSelect={handleDateSelect}
                         disabled={isDateDisabled}
                         defaultMonth={new Date(2025, 8)} // September 2025 (month is 0-based)
                         initialFocus
                         className="p-3 pointer-events-auto"
+                        numberOfMonths={1}
                       />
                     </PopoverContent>
                   </Popover>
                   {errors.travelDate && (
                     <p className="text-sm text-destructive">
-                      {errors.travelDate.message}
+                      Travel date is required
+                    </p>
+                  )}
+                  {watchedTour === "tour-packages" && watchedPackage && (
+                    <p className="text-xs text-muted-foreground">
+                      Select start date for your{" "}
+                      {getPackageDays(watchedPackage)}-day package
                     </p>
                   )}
                 </div>
