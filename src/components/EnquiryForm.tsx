@@ -86,11 +86,14 @@ const EnquiryForm = () => {
         );
 
         if (data.travelDate.to) {
-          const toDate = new Date(data.travelDate.to).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          });
+          const toDate = new Date(data.travelDate.to).toLocaleDateString(
+            "en-US",
+            {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            }
+          );
           formattedDate = `${fromDate} - ${toDate}`;
         } else {
           formattedDate = fromDate;
@@ -98,7 +101,9 @@ const EnquiryForm = () => {
       }
 
       // Create email content
-      const subject = encodeURIComponent(`Durga Puja Tour Enquiry from ${data.name}`);
+      const subject = encodeURIComponent(
+        `Durga Puja Tour Enquiry from ${data.name}`
+      );
       const body = encodeURIComponent(`
 Dear Team,
 
@@ -108,28 +113,29 @@ Name: ${data.name}
 Email: ${data.email}
 Phone: ${data.phone}
 Interested Tour: ${data.interestedTour}
-${data.travelPackage ? `Travel Package: ${data.travelPackage}` : ''}
-${formattedDate ? `Preferred Travel Date: ${formattedDate}` : ''}
-${data.message ? `Additional Message: ${data.message}` : ''}
+${data.travelPackage ? `Travel Package: ${data.travelPackage}` : ""}
+${formattedDate ? `Preferred Travel Date: ${formattedDate}` : ""}
+${data.message ? `Additional Message: ${data.message}` : ""}
 
 Submitted on: ${new Date().toLocaleString()}
 
 Best regards,
 ${data.name}
       `);
-      
+
       // Create mailto link
       const mailtoLink = `mailto:souradip1000@gmail.com?subject=${subject}&body=${body}`;
-      
+
       // Open email client
       window.location.href = mailtoLink;
-      
+
       // Show success message
       toast({
         title: "Enquiry Prepared!",
-        description: "Your email client will open with the enquiry details. Please send the email to complete your submission.",
+        description:
+          "Your email client will open with the enquiry details. Please send the email to complete your submission.",
       });
-      
+
       // Reset form after a short delay
       setTimeout(() => {
         setDateRange(undefined);
@@ -140,12 +146,12 @@ ${data.name}
         setValue("travelPackage", "");
         setValue("message", "");
       }, 2000);
-      
     } catch (error) {
-      console.error('Error submitting enquiry:', error);
+      console.error("Error submitting enquiry:", error);
       toast({
         title: "Submission Failed",
-        description: "Please try again or contact us directly at souradip1000@gmail.com",
+        description:
+          "Please try again or contact us directly at souradip1000@gmail.com",
         variant: "destructive",
       });
     }
