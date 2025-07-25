@@ -107,27 +107,61 @@ const EnquiryForm = () => {
       const maxAllowedStartDate = 23 - requiredDays + 1;
 
       if (day < 18 || day > maxAllowedStartDate) return true;
-    } else {
+    }
+    // For Cruising Into Puja, only allow September 21
+    else if (watchedTour === "cruising-through-puja") {
+      if (day !== 21) return true;
+    }
+    // For Durga Preview Express, only allow September 19 or 23
+    else if (watchedTour === "durga-preview-express") {
+      if (day !== 19 && day !== 23) return true;
+    }
+    // For other tours, allow September 18-23
+    else {
       if (day < 18 || day > 23) return true;
     }
 
     return false;
   };
 
-  const handleDateSelect = (selectedRange: DateRange | undefined) => {
-    if (!selectedRange?.from) return;
+  const handleDateSelect = (selectedDate: Date | DateRange | undefined) => {
+    // Handle both single Date and DateRange types
+    let fromDate: Date | undefined;
 
-    let range = selectedRange;
+    if (selectedDate instanceof Date) {
+      fromDate = selectedDate;
+    } else if (selectedDate && "from" in selectedDate && selectedDate.from) {
+      fromDate = selectedDate.from;
+    }
+
+    if (!fromDate) return;
+
+    let range: DateRange;
 
     // For tour packages, automatically set the end date based on package duration
     if (watchedTour === "tour-packages" && watchedPackage) {
       const days = getPackageDays(watchedPackage);
-      const endDate = new Date(selectedRange.from);
+      const endDate = new Date(fromDate);
       endDate.setDate(endDate.getDate() + days - 1);
 
       range = {
-        from: selectedRange.from,
+        from: fromDate,
         to: endDate,
+      };
+    }
+    // For Cruising Into Puja, auto-set to September 21, 2025
+    else if (watchedTour === "cruising-through-puja") {
+      const fixedDate = new Date(2025, 8, 21); // September 21, 2025
+      range = {
+        from: fixedDate,
+        to: undefined,
+      };
+    }
+    // For other single date selections (like Durga Preview Express)
+    else {
+      range = {
+        from: fromDate,
+        to: undefined,
       };
     }
 
@@ -135,9 +169,7 @@ const EnquiryForm = () => {
     setValue("travelDate", range);
 
     // Auto-close the calendar after selection
-    if (range.from && (range.to || watchedTour !== "tour-packages")) {
-      setIsCalendarOpen(false);
-    }
+    setIsCalendarOpen(false);
   };
 
   const formatDateRange = (range: DateRange | undefined) => {
@@ -217,7 +249,19 @@ const EnquiryForm = () => {
                 <div className="space-y-2">
                   <Label htmlFor="interestedTour">Interested Tour *</Label>
                   <Select
-                    onValueChange={(value) => setValue("interestedTour", value)}
+                    onValueChange={(value) => {
+                      setValue("interestedTour", value);
+                      // Auto-set date for Cruising Into Puja
+                      if (value === "cruising-through-puja") {
+                        const fixedDate = new Date(2025, 8, 21); // September 21, 2025
+                        const range = { from: fixedDate, to: undefined };
+                        setDateRange(range);
+                        setValue("travelDate", range);
+                      } else {
+                        // Reset date for other tours
+                        setDateRange(undefined);
+                      }
+                    }}
                   >
                     <SelectTrigger
                       className={
@@ -284,11 +328,16 @@ const EnquiryForm = () => {
                 <div className="space-y-2">
                   <Label>Preferred Travel Date *</Label>
                   <Popover
-                    open={isCalendarOpen}
+                    open={
+                      watchedTour === "cruising-through-puja"
+                        ? false
+                        : isCalendarOpen
+                    }
                     onOpenChange={(open) => {
+                      if (watchedTour === "cruising-through-puja") return; // Don't allow opening for cruising tour
                       setIsCalendarOpen(open);
-                      // Reset date selection when calendar opens
-                      if (open) {
+                      // Only reset date selection for tour packages when calendar opens
+                      if (open && watchedTour === "tour-packages") {
                         setDateRange(undefined);
                       }
                     }}
@@ -296,10 +345,13 @@ const EnquiryForm = () => {
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
+                        disabled={watchedTour === "cruising-through-puja"}
                         className={cn(
                           "w-full justify-start text-left font-normal",
                           !dateRange?.from && "text-muted-foreground",
-                          errors.travelDate && "border-destructive"
+                          errors.travelDate && "border-destructive",
+                          watchedTour === "cruising-through-puja" &&
+                            "cursor-not-allowed opacity-75"
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
@@ -311,7 +363,11 @@ const EnquiryForm = () => {
                         mode={
                           watchedTour === "tour-packages" ? "range" : "single"
                         }
-                        selected={dateRange}
+                        selected={
+                          watchedTour === "tour-packages"
+                            ? dateRange
+                            : dateRange?.from
+                        }
                         onSelect={handleDateSelect}
                         disabled={isDateDisabled}
                         defaultMonth={new Date(2025, 8)} // September 2025 (month is 0-based)
@@ -330,6 +386,16 @@ const EnquiryForm = () => {
                     <p className="text-xs text-muted-foreground">
                       Select start date for your{" "}
                       {getPackageDays(watchedPackage)}-day package
+                    </p>
+                  )}
+                  {watchedTour === "cruising-through-puja" && (
+                    <p className="text-xs text-muted-foreground">
+                      Date is fixed for September 21, 2025
+                    </p>
+                  )}
+                  {watchedTour === "durga-preview-express" && (
+                    <p className="text-xs text-muted-foreground">
+                      Select September 19 or 23, 2025
                     </p>
                   )}
                 </div>
