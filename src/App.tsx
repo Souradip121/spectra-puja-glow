@@ -8,9 +8,7 @@ import NotFound from "./pages/NotFound";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
-import TravelPackages from "@/components/TravelPackages";
 import DurgaPujaArt2025 from "@/components/DurgaPujaArt2025";
-import Services from "@/components/Services";
 import Contact from "@/components/Contact";
 
 const queryClient = new QueryClient();
@@ -37,9 +35,7 @@ function Main() {
       <Header />
       <Hero />
       <About />
-      <TravelPackages />
       <DurgaPujaArt2025 />
-      <Services />
       <Contact />
     </div>
   );
