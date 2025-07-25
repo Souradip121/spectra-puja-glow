@@ -71,12 +71,84 @@ const EnquiryForm = () => {
   const watchedTour = watch("interestedTour");
   const watchedPackage = watch("travelPackage");
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
-    toast({
-      title: "Enquiry Submitted!",
-      description: "We'll get back to you within 24 hours.",
-    });
+  const onSubmit = async (data: FormData) => {
+    try {
+      // Format the travel date
+      let formattedDate = "";
+      if (data.travelDate?.from) {
+        const fromDate = new Date(data.travelDate.from).toLocaleDateString(
+          "en-US",
+          {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }
+        );
+
+        if (data.travelDate.to) {
+          const toDate = new Date(data.travelDate.to).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
+          formattedDate = `${fromDate} - ${toDate}`;
+        } else {
+          formattedDate = fromDate;
+        }
+      }
+
+      // Create email content
+      const subject = encodeURIComponent(`Durga Puja Tour Enquiry from ${data.name}`);
+      const body = encodeURIComponent(`
+Dear Team,
+
+I would like to enquire about your Durga Puja tours. Here are my details:
+
+Name: ${data.name}
+Email: ${data.email}
+Phone: ${data.phone}
+Interested Tour: ${data.interestedTour}
+${data.travelPackage ? `Travel Package: ${data.travelPackage}` : ''}
+${formattedDate ? `Preferred Travel Date: ${formattedDate}` : ''}
+${data.message ? `Additional Message: ${data.message}` : ''}
+
+Submitted on: ${new Date().toLocaleString()}
+
+Best regards,
+${data.name}
+      `);
+      
+      // Create mailto link
+      const mailtoLink = `mailto:souradip1000@gmail.com?subject=${subject}&body=${body}`;
+      
+      // Open email client
+      window.location.href = mailtoLink;
+      
+      // Show success message
+      toast({
+        title: "Enquiry Prepared!",
+        description: "Your email client will open with the enquiry details. Please send the email to complete your submission.",
+      });
+      
+      // Reset form after a short delay
+      setTimeout(() => {
+        setDateRange(undefined);
+        setValue("name", "");
+        setValue("email", "");
+        setValue("phone", "");
+        setValue("interestedTour", "");
+        setValue("travelPackage", "");
+        setValue("message", "");
+      }, 2000);
+      
+    } catch (error) {
+      console.error('Error submitting enquiry:', error);
+      toast({
+        title: "Submission Failed",
+        description: "Please try again or contact us directly at souradip1000@gmail.com",
+        variant: "destructive",
+      });
+    }
   };
 
   // Get the number of days based on selected package
