@@ -1,12 +1,13 @@
 import { Button } from "@/components/ui/button";
 import HeroImage from "@/assets/Hero.png";
+import massArtLogo from "@/assets/massArt.png";
 
 const Hero = () => {
   return (
     <section
       id="home"
       className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
-      style={{ backgroundColor: "#424242" }}
+      style={{ backgroundColor: "#000000" }}
     >
       {/* Gradient background overlay */}
       <div className="absolute inset-0 opacity-10 z-0">
@@ -17,10 +18,14 @@ const Hero = () => {
       <div className="container mx-auto px-4 pt-20 sm:pt-32 pb-16 sm:pb-20 text-center relative z-10">
         <div className="max-w-6xl mx-auto animate-fade-up space-y-0">
           {/* Badge */}
-          <div className="inline-flex items-center px-6 py-3 rounded-full bg-card/80 backdrop-blur-sm border border-primary/20">
-            <span className="text-base sm:text-lg font-medium text-primary">
+          <div className="inline-flex items-center px-6 py-3">
+            <span className="text-base sm:text-lg font-medium text-white">
               Official Travel Partner for{" "}
-              <span style={{ color: "#FF3D00" }}>massArt</span>
+              <img
+                src={massArtLogo}
+                alt="massArt"
+                className="inline-block h-16 w-auto ml-2"
+              />
             </span>
           </div>
 
