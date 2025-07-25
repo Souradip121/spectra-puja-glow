@@ -13,22 +13,17 @@ const DurgaPujaArt2025 = () => {
   const specialPackages = [
     {
       title: "CRUISING INTO PUJA -A MAHALAYA SPECIAL",
-      dates: "Sunday, 21 September 2025",
-      description: "Hooghly River Cruise & Heritage Tour.",
-      features: [
-        "A river cruise with performances, stories & a Bengali lunch.",
-      ],
+      description:
+        "Set sail on a heritage-filled cruise along the Hooghly aboard India's last surviving paddle steamer. Enjoy folk performances, storytelling, Bengali cuisine, and a visit to the Riverine Museum. With cultural games, Puja-themed AV showcases and the festive rhythm of Dhakis, this unique experience captures the sights, sound and spirit of Durga Puja—right on the river.",
+      features: [],
       image: cruisingintopujaImg,
       displayImage: riverCruiseImg,
     },
     {
       title: "DURGA PREVIEW EXPRESS",
-      dates: "18-22 September 2025",
       description:
-        "An exclusive overnight bus tour of Kolkata's 10 finest Durga Puja installations.",
-      features: [
-        "Heritage tour included, Cultural performances, Traditional Bengali lunch",
-      ],
+        "The Durga Preview Express is a curated 10-hour night tour through Kolkata's most spectacular Durga Puja Art installations. Travel in a comfortable AC coach, enjoy a delicious dinner, and explore 10 handpicked pandals. Perfect for Art lovers and festive explorers seeking a safe, crowd-free and immersive cultural experience under the enchanting lights of the Kolkata night.",
+      features: [],
       image: durgapujaexpressImg,
       displayImage: previewExpressDisplayImg,
     },
@@ -37,30 +32,30 @@ const DurgaPujaArt2025 = () => {
   const mainPackages = [
     {
       title: "3 Nights & 4 Days",
-      dates: "18-22 September 2025",
+      installations: "24 contemporary installations, 1 Traditional Puja, 1 Bonedi Bari and Kolkata Townhall Exhibition",
       features: [
         "An extensive cultural deep dive into durga puja and kolkata's soul",
-        "Passionate Art and heritage enthusiasts looking for immersive storytelling",
+        "Ideal for Passionate Art and heritage enthusiasts looking for immersive storytelling",
       ],
       image: img3n4d,
       pdf: "/pdfs/3n.pdf",
     },
     {
       title: "2 Nights & 3 Days",
-      dates: "18-22 September 2025",
+      installations: "15 contemporary installations, 1 Traditional Puja, 1 Bonedi Bari and Kolkata Townhall Exhibition",
       features: [
         "Well-rounded journey blending Art, tradition and curated experiences",
-        "Curious travelers balancing time with a love for culture and tradition",
+        "For Curious travelers balancing time with a love for culture and tradition",
       ],
       image: img2n3d,
       pdf: "/pdfs/2n.pdf",
     },
     {
       title: "1 Night & 2 Days",
-      dates: "18-22 September 2025",
+      installations: "6 contemporary installations, 1 Traditional Puja, 1 Bonedi Bari and Kolkata Townhall Exhibition",
       features: [
-        "A quick yet immersive glimpse into kolkata's artistic celebrations",
-        "Urban explorers, seeking a guided puja experience",
+        "A quick yet immersive glimpse into Kolkata's artistic celebrations",
+        "For anyone seeking a short, guided Durga Puja experience",
       ],
       image: img1n2d,
       pdf: "/pdfs/1n.pdf",
@@ -221,7 +216,7 @@ const DurgaPujaArt2025 = () => {
 
               <CardHeader className="text-center pt-4 pb-2">
                 <div className="text-sm text-durga-red flex items-center justify-center">
-                  {pkg.dates}
+                  {pkg.installations}
                 </div>
               </CardHeader>
 
@@ -268,23 +263,25 @@ const DurgaPujaArt2025 = () => {
 
               <CardHeader className="text-center pt-4 pb-2">
                 <div className="text-sm text-durga-red flex items-center justify-center">
-                  {pkg.dates}
+                  {/* {pkg.dates} */}
                 </div>
               </CardHeader>
 
               <CardContent className="px-4 pb-4 flex flex-col flex-1">
                 <div className="flex-1">
-                  <p className="text-sm text-muted-foreground text-center mb-2">
+                  <p className="text-sm text-muted-foreground text-center mb-4">
                     {pkg.description}
                   </p>
-                  <ul className="space-y-1 mb-4 text-sm">
-                    {pkg.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-center">
-                        <div className="w-2 h-2 bg-durga-gold rounded-full mr-2" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
+                  {pkg.features.length > 0 && (
+                    <ul className="space-y-1 mb-4 text-sm">
+                      {pkg.features.map((feature, idx) => (
+                        <li key={idx} className="flex items-center">
+                          <div className="w-2 h-2 bg-durga-gold rounded-full mr-2" />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
                 <Button
                   className="w-full bg-durga-gold hover:bg-durga-gold/90 text-white"
@@ -303,3 +300,6 @@ const DurgaPujaArt2025 = () => {
 };
 
 export default DurgaPujaArt2025;
+
+
+
