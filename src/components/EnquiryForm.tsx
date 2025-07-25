@@ -254,7 +254,10 @@ const EnquiryForm = () => {
                         setValue("travelPackage", value);
                         // Reset date range when package changes
                         setDateRange(undefined);
-                        setValue("travelDate", { from: new Date(), to: undefined });
+                        setValue("travelDate", {
+                          from: new Date(),
+                          to: undefined,
+                        });
                       }}
                     >
                       <SelectTrigger
