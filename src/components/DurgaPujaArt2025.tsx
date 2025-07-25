@@ -251,6 +251,7 @@ const DurgaPujaArt2025 = () => {
           {specialPackages.map((pkg, index) => (
             <Card
               key={index}
+              id={index === 0 ? "cruising-into-puja" : "durga-preview-express"}
               className="flex flex-col overflow-hidden hover:shadow-xl transition-all duration-300"
             >
               <div className="relative h-48 w-full overflow-hidden">

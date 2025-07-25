@@ -87,13 +87,34 @@ const Header = () => {
             >
               About Us
             </a>
-            <a
-              href="#durga-puja-art"
-              className="block text-foreground hover:text-primary transition-colors"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Durga Puja Art 2025
-            </a>
+            <div className="space-y-2">
+              <div className="block text-foreground font-medium">
+                Durga Puja Art 2025
+              </div>
+              <div className="ml-4 space-y-2">
+                <a
+                  href="#durga-puja-art"
+                  className="block text-sm text-muted-foreground hover:text-primary transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  → Exclusive Travel Packages
+                </a>
+                <a
+                  href="#cruising-into-puja"
+                  className="block text-sm text-muted-foreground hover:text-primary transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  → Cruising Into Puja
+                </a>
+                <a
+                  href="#durga-preview-express"
+                  className="block text-sm text-muted-foreground hover:text-primary transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  → Durga Preview Express
+                </a>
+              </div>
+            </div>
             <a
               href="#gallery"
               className="block text-foreground hover:text-primary transition-colors"
