@@ -325,80 +325,83 @@ const EnquiryForm = () => {
                   </div>
                 )}
 
-                <div className="space-y-2">
-                  <Label>Preferred Travel Date *</Label>
-                  <Popover
-                    open={
-                      watchedTour === "cruising-through-puja"
-                        ? false
-                        : isCalendarOpen
-                    }
-                    onOpenChange={(open) => {
-                      if (watchedTour === "cruising-through-puja") return; // Don't allow opening for cruising tour
-                      setIsCalendarOpen(open);
-                      // Only reset date selection for tour packages when calendar opens
-                      if (open && watchedTour === "tour-packages") {
-                        setDateRange(undefined);
+                {/* Only show date selection for tours that need it */}
+                {watchedTour && watchedTour !== "other" && (
+                  <div className="space-y-2">
+                    <Label>Preferred Travel Date *</Label>
+                    <Popover
+                      open={
+                        watchedTour === "cruising-through-puja"
+                          ? false
+                          : isCalendarOpen
                       }
-                    }}
-                  >
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        disabled={watchedTour === "cruising-through-puja"}
-                        className={cn(
-                          "w-full justify-start text-left font-normal",
-                          !dateRange?.from && "text-muted-foreground",
-                          errors.travelDate && "border-destructive",
-                          watchedTour === "cruising-through-puja" &&
-                            "cursor-not-allowed opacity-75"
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {formatDateRange(dateRange)}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <CalendarComponent
-                        mode={
-                          watchedTour === "tour-packages" ? "range" : "single"
+                      onOpenChange={(open) => {
+                        if (watchedTour === "cruising-through-puja") return; // Don't allow opening for cruising tour
+                        setIsCalendarOpen(open);
+                        // Only reset date selection for tour packages when calendar opens
+                        if (open && watchedTour === "tour-packages") {
+                          setDateRange(undefined);
                         }
-                        selected={
-                          watchedTour === "tour-packages"
-                            ? dateRange
-                            : dateRange?.from
-                        }
-                        onSelect={handleDateSelect}
-                        disabled={isDateDisabled}
-                        defaultMonth={new Date(2025, 8)} // September 2025 (month is 0-based)
-                        initialFocus
-                        className="p-3 pointer-events-auto"
-                        numberOfMonths={1}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  {errors.travelDate && (
-                    <p className="text-sm text-destructive">
-                      Travel date is required
-                    </p>
-                  )}
-                  {watchedTour === "tour-packages" && watchedPackage && (
-                    <p className="text-xs text-muted-foreground">
-                      Select start date for your{" "}
-                      {getPackageDays(watchedPackage)}-day package
-                    </p>
-                  )}
-                  {watchedTour === "cruising-through-puja" && (
-                    <p className="text-xs text-muted-foreground">
-                      Date is fixed for September 21, 2025
-                    </p>
-                  )}
-                  {watchedTour === "durga-preview-express" && (
-                    <p className="text-xs text-muted-foreground">
-                      Select September 19 or 23, 2025
-                    </p>
-                  )}
-                </div>
+                      }}
+                    >
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          disabled={watchedTour === "cruising-through-puja"}
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !dateRange?.from && "text-muted-foreground",
+                            errors.travelDate && "border-destructive",
+                            watchedTour === "cruising-through-puja" &&
+                              "cursor-not-allowed opacity-75"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {formatDateRange(dateRange)}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <CalendarComponent
+                          mode={
+                            watchedTour === "tour-packages" ? "range" : "single"
+                          }
+                          selected={
+                            watchedTour === "tour-packages"
+                              ? dateRange
+                              : dateRange?.from
+                          }
+                          onSelect={handleDateSelect}
+                          disabled={isDateDisabled}
+                          defaultMonth={new Date(2025, 8)} // September 2025 (month is 0-based)
+                          initialFocus
+                          className="p-3 pointer-events-auto"
+                          numberOfMonths={1}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    {errors.travelDate && (
+                      <p className="text-sm text-destructive">
+                        Travel date is required
+                      </p>
+                    )}
+                    {watchedTour === "tour-packages" && watchedPackage && (
+                      <p className="text-xs text-muted-foreground">
+                        Select start date for your{" "}
+                        {getPackageDays(watchedPackage)}-day package
+                      </p>
+                    )}
+                    {watchedTour === "cruising-through-puja" && (
+                      <p className="text-xs text-muted-foreground">
+                        Date is fixed for September 21, 2025
+                      </p>
+                    )}
+                    {watchedTour === "durga-preview-express" && (
+                      <p className="text-xs text-muted-foreground">
+                        Select September 19 or 23, 2025
+                      </p>
+                    )}
+                  </div>
+                )}
 
                 <div className="space-y-2">
                   <Label htmlFor="message">Additional Message</Label>
