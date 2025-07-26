@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import HeroImage from "@/assets/Hero.png";
+import HeroImage from "@/assets/herofinal.png";
 import massArtLogo from "@/assets/massArt.png";
 
 const Hero = () => {
@@ -18,15 +18,11 @@ const Hero = () => {
       <div className="container mx-auto px-4 pt-2 sm:pt-32 pb-16 sm:pb-20 text-center relative z-10">
         <div className="max-w-6xl mx-auto animate-fade-up space-y-0">
           {/* Badge */}
-          <div className="inline-flex items-center px-6 py-2 sm:py-3">
-            <span className="text-base sm:text-lg font-medium text-white">
-              Official Travel Partner for{" "}
-              <img
-                src={massArtLogo}
-                alt="massArt"
-                className="inline-block h-16 w-auto ml-2"
-              />
+          <div className="inline-flex flex-col items-center px-6 py-2 sm:py-3">
+            <span className="text-base sm:text-lg font-medium text-white mb-2">
+              Official Travel Partner for
             </span>
+            <img src={massArtLogo} alt="massArt" className="h-16 w-auto" />
           </div>
 
           {/* Hero Image */}
