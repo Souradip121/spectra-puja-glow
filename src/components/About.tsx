@@ -53,7 +53,7 @@ const About = () => {
   return (
     <section id="about" className="py-20 bg-durga-cream/10">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
+        <div className="text-center mb-4 md:mb-16">
           <h2 className="text-4xl font-bold text-foreground mb-6">About Us</h2>
           <div className="text-muted-foreground leading-relaxed max-w-3xl mx-auto mb-12">
             <p className="mb-4">
@@ -70,7 +70,7 @@ const About = () => {
             </p>
           </div>
 
-          <h3 className="text-2xl font-semibold text-foreground mb-8">
+          <h3 className="text-2xl font-semibold text-foreground mb-1 md:mb-8">
             Why Choose SPECTRA?
           </h3>
         </div>
