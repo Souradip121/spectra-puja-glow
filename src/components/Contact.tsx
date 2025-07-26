@@ -49,17 +49,18 @@ const Contact = () => {
                 </a>
                 <br />
                 <a
-                  href="tel:7980839680"
-                  className="text-primary hover:underline"
-                >
-                  7980839680
-                </a>
-                <br />
-                <a
                   href="tel:8420797474"
                   className="text-primary hover:underline"
                 >
                   8420797474
+                </a>
+                
+                <br />
+                <a
+                  href="tel:7980839680"
+                  className="text-primary hover:underline"
+                >
+                  7980839680
                 </a>
               </p>
             </CardContent>

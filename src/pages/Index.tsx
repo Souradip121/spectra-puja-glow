@@ -18,8 +18,8 @@ const Index = () => {
       <About />
       <DurgaPujaArt2025 />
       <TourPointers />
-      <EnquiryForm />
       <Gallery />
+      <EnquiryForm />
       <Contact />
       <Footer />
       <WhatsAppFloat />

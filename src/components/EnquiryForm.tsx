@@ -190,9 +190,9 @@ ${data.name}
     else if (watchedTour === "cruising-through-puja") {
       if (day !== 21) return true;
     }
-    // For Durga Preview Express, only allow September 19 or 23
+    // For Durga Preview Express, allow September 19-22
     else if (watchedTour === "durga-preview-express") {
-      if (day !== 19 && day !== 23) return true;
+      if (day < 19 || day > 22) return true;
     }
     // For other tours, allow September 18-23
     else {
@@ -350,7 +350,7 @@ ${data.name}
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="tour-packages">
-                        Tour Packages
+                        Travel Packages
                       </SelectItem>
                       <SelectItem value="cruising-through-puja">
                         Cruising Into Puja
@@ -475,7 +475,7 @@ ${data.name}
                     )}
                     {watchedTour === "durga-preview-express" && (
                       <p className="text-xs text-muted-foreground">
-                        Select September 19 or 23, 2025
+                        Select any date between 19th and 22nd September 2025
                       </p>
                     )}
                   </div>

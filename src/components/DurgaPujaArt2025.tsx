@@ -226,6 +226,12 @@ const DurgaPujaArt2025 = () => {
                   alt={pkg.title}
                   className="w-full h-full object-cover transition-transform duration-300"
                 />
+                {/* Date at top center */}
+                <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-black/70 text-white px-3 py-1 rounded-md">
+                  <span className="text-xs font-medium">
+                    18th to 22nd September 2025
+                  </span>
+                </div>
                 <div className="absolute bottom-4 left-4 text-white">
                   <h3 className="text-2xl font-bold">{pkg.title}</h3>
                 </div>
@@ -258,9 +264,12 @@ const DurgaPujaArt2025 = () => {
                   </ul>
                 </div>
                 <Button
-                  className="w-full bg-durga-gold hover:bg-durga-gold/90 text-white mt-auto"
+                  className="w-full text-white mt-auto"
+                  style={{ backgroundColor: '#fdd835' }}
                   size="lg"
                   onClick={() => window.open(pkg.pdf, "_blank")}
+                  onMouseEnter={(e) => e.target.style.backgroundColor = '#f9c11d'}
+                  onMouseLeave={(e) => e.target.style.backgroundColor = '#fdd835'}
                 >
                   Get Info
                 </Button>
@@ -326,9 +335,12 @@ const DurgaPujaArt2025 = () => {
                     )}
                   </div>
                   <Button
-                    className="w-full bg-durga-gold hover:bg-durga-gold/90 text-white"
+                    className="w-full text-white"
+                    style={{ backgroundColor: '#fdd835' }}
                     size="lg"
                     onClick={() => window.open(pkg.displayImage, "_blank")}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = '#f9c11d'}
+                    onMouseLeave={(e) => e.target.style.backgroundColor = '#fdd835'}
                   >
                     View Now
                   </Button>
