@@ -57,7 +57,7 @@ const About = () => {
           <h2 className="text-4xl font-bold text-foreground mb-6">About Us</h2>
           <div className="text-muted-foreground leading-relaxed max-w-3xl mx-auto mb-12">
             <p className="mb-4">
-              At SPECTRA, we create events and experiences that span a vibrant
+              At SPECTRA since 2024, we create events and experiences that span a vibrant
               spectrum of ideas, styles, and formats. There's no
               one-size-fits-all approach — only fresh, colourful concepts
               thoughtfully tailored to every occasion.
