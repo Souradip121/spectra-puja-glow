@@ -13,6 +13,7 @@ const DurgaPujaArt2025 = () => {
   const specialPackages = [
     {
       title: "CRUISING INTO PUJA -A MAHALAYA SPECIAL",
+      date: "21 September 2025",
       description:
         "Set sail on a heritage-filled cruise along the Hooghly aboard India's last surviving paddle steamer. Enjoy folk performances, storytelling, Bengali cuisine, and a visit to the Riverine Museum. With cultural games, Puja-themed AV showcases and the festive rhythm of Dhakis, this unique experience captures the sights, sound and spirit of Durga Puja—right on the river.",
       features: [],
@@ -21,6 +22,7 @@ const DurgaPujaArt2025 = () => {
     },
     {
       title: "DURGA PREVIEW EXPRESS",
+      date: "19 to 22 September 2025",
       description:
         "The Durga Preview Express is a curated 10-hour night tour through Kolkata's most spectacular Durga Puja Art installations. Travel in a comfortable AC coach, enjoy a delicious dinner, and explore 10 handpicked pandals. Perfect for Art lovers and festive explorers seeking a safe, crowd-free and immersive cultural experience under the enchanting lights of the Kolkata night.",
       features: [],
@@ -290,7 +292,12 @@ const DurgaPujaArt2025 = () => {
                     alt={pkg.title}
                     className="w-full h-full object-cover object-top transition-transform duration-300"
                   />
-                  <div className="absolute bottom-4 left-4 text-white">
+                  {/* Date at top center */}
+                  <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-black/70 text-white px-3 py-1 rounded-md">
+                    <span className="text-sm font-medium">{pkg.date}</span>
+                  </div>
+                  {/* Title at bottom - hidden on mobile */}
+                  <div className="absolute bottom-4 left-4 text-white hidden md:block">
                     <h3 className="text-2xl font-bold">{pkg.title}</h3>
                   </div>
                 </div>
