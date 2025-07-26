@@ -32,8 +32,12 @@ const DurgaPujaArt2025 = () => {
   const mainPackages = [
     {
       title: "3 Nights & 4 Days",
-      installations:
-        "24 contemporary installations, 1 Traditional Puja, 1 Bonedi Bari and Kolkata Townhall Exhibition",
+      installations: [
+        "24 contemporary installations",
+        "1 Traditional Puja",
+        "1 Bonedi Bari visit",
+        "Kolkata Townhall Exhibition",
+      ],
       features: [
         "An extensive cultural deep dive into durga puja and kolkata's soul",
         "Ideal for Passionate Art and heritage enthusiasts looking for immersive storytelling",
@@ -43,8 +47,12 @@ const DurgaPujaArt2025 = () => {
     },
     {
       title: "2 Nights & 3 Days",
-      installations:
-        "15 contemporary installations, 1 Traditional Puja, 1 Bonedi Bari and Kolkata Townhall Exhibition",
+      installations: [
+        "15 contemporary installations",
+        "1 Traditional Puja",
+        "1 Bonedi Bari visit",
+        "Kolkata Townhall Exhibition",
+      ],
       features: [
         "Well-rounded journey blending Art, tradition and curated experiences",
         "For Curious travelers balancing time with a love for culture and tradition",
@@ -54,8 +62,12 @@ const DurgaPujaArt2025 = () => {
     },
     {
       title: "1 Night & 2 Days",
-      installations:
-        "6 contemporary installations, 1 Traditional Puja, 1 Bonedi Bari and Kolkata Townhall Exhibition",
+      installations: [
+        "6 contemporary installations",
+        "1 Traditional Puja",
+        "1 Bonedi Bari visit",
+        "Kolkata Townhall Exhibition",
+      ],
       features: [
         "A quick yet immersive glimpse into Kolkata's artistic celebrations",
         "For anyone seeking a short, guided Durga Puja experience",
@@ -108,8 +120,8 @@ const DurgaPujaArt2025 = () => {
     <section id="durga-puja-art" className="py-20 bg-durga-cream/10">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-foreground mb-4">
-            Durga Puja Art 2025
+          <h2 className="text-5xl font-bold text-foreground mb-4">
+            DURGA PUJA ART 2025
           </h2>
         </div>
 
@@ -126,10 +138,10 @@ const DurgaPujaArt2025 = () => {
             </p>
             <p className="text-muted-foreground leading-relaxed">
               Step into the heart of Bengal's cultural magic with an exclusive,
-              guided preview tour of Durga Puja between 18th to 22nd September
-              2025— before the crowds arrive. Witness Kolkata transform into a
-              vast open-air gallery, where art, tradition and storytelling come
-              alive.
+              guided preview tour of Durga Puja between{" "}
+              <b>18th to 22nd September 2025</b>— before the crowds arrive.
+              Witness Kolkata transform into a vast open-air gallery, where art,
+              tradition and storytelling come alive.
             </p>
             <p className="text-muted-foreground leading-relaxed mt-4">
               This one-of-a-kind experience offers rare, green-channel access to
@@ -213,13 +225,22 @@ const DurgaPujaArt2025 = () => {
                   className="w-full h-full object-cover transition-transform duration-300"
                 />
                 <div className="absolute bottom-4 left-4 text-white">
-                  <h3 className="text-lg font-bold">{pkg.title}</h3>
+                  <h3 className="text-2xl font-bold">{pkg.title}</h3>
                 </div>
               </div>
 
               <CardHeader className="text-center pt-4 pb-2">
-                <div className="text-sm text-durga-red flex items-center justify-center">
-                  {pkg.installations}
+                <div className="text-sm text-durga-red">
+                  <ul className="space-y-1">
+                    {pkg.installations.map((installation, idx) => (
+                      <li
+                        key={idx}
+                        className="flex items-center justify-center"
+                      >
+                        <span className="font-bold">{installation}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </CardHeader>
 
@@ -227,9 +248,9 @@ const DurgaPujaArt2025 = () => {
                 <div>
                   <ul className="space-y-1 mb-4 text-sm">
                     {pkg.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-center">
-                        <div className="w-2 h-2 bg-durga-gold rounded-full mr-2" />
-                        {feature}
+                      <li key={idx} className="flex items-start">
+                        <div className="w-2 h-2 bg-durga-gold rounded-full mt-2 mr-3 flex-shrink-0" />
+                        <span>{feature}</span>
                       </li>
                     ))}
                   </ul>
@@ -249,53 +270,63 @@ const DurgaPujaArt2025 = () => {
         {/* Special Packages - 2 cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {specialPackages.map((pkg, index) => (
-            <Card
-              key={index}
-              id={index === 0 ? "cruising-into-puja" : "durga-preview-express"}
-              className="flex flex-col overflow-hidden hover:shadow-xl transition-all duration-300"
-            >
-              <div className="relative h-48 w-full overflow-hidden">
-                <img
-                  src={pkg.image}
-                  alt={pkg.title}
-                  className="w-full h-full object-cover object-top transition-transform duration-300"
-                />
-                <div className="absolute bottom-4 left-4 text-white">
-                  <h3 className="text-xl font-bold">{pkg.title}</h3>
-                </div>
+            <div key={index}>
+              {/* Mobile-only heading for each card */}
+              <div className="md:hidden text-center mb-4">
+                <h3 className="text-2xl font-semibold text-foreground">
+                  {index === 0 ? "CRUISING INTO PUJA" : "DURGA PREVIEW EXPRESS"}
+                </h3>
               </div>
 
-              <CardHeader className="text-center pt-4 pb-2">
-                <div className="text-sm text-durga-red flex items-center justify-center">
-                  {/* {pkg.dates} */}
+              <Card
+                id={
+                  index === 0 ? "cruising-into-puja" : "durga-preview-express"
+                }
+                className="flex flex-col overflow-hidden hover:shadow-xl transition-all duration-300"
+              >
+                <div className="relative h-48 w-full overflow-hidden">
+                  <img
+                    src={pkg.image}
+                    alt={pkg.title}
+                    className="w-full h-full object-cover object-top transition-transform duration-300"
+                  />
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <h3 className="text-2xl font-bold">{pkg.title}</h3>
+                  </div>
                 </div>
-              </CardHeader>
 
-              <CardContent className="px-4 pb-4 flex flex-col flex-1">
-                <div className="flex-1">
-                  <p className="text-sm text-muted-foreground text-center mb-4">
-                    {pkg.description}
-                  </p>
-                  {pkg.features.length > 0 && (
-                    <ul className="space-y-1 mb-4 text-sm">
-                      {pkg.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-center">
-                          <div className="w-2 h-2 bg-durga-gold rounded-full mr-2" />
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-                <Button
-                  className="w-full bg-durga-gold hover:bg-durga-gold/90 text-white"
-                  size="lg"
-                  onClick={() => window.open(pkg.displayImage, "_blank")}
-                >
-                  View Now
-                </Button>
-              </CardContent>
-            </Card>
+                <CardHeader className="text-center pt-4 pb-2">
+                  <div className="text-sm text-durga-red flex items-center justify-center">
+                    {/* {pkg.dates} */}
+                  </div>
+                </CardHeader>
+
+                <CardContent className="px-4 pb-4 flex flex-col flex-1">
+                  <div className="flex-1">
+                    <p className="text-sm text-muted-foreground text-center mb-4">
+                      {pkg.description}
+                    </p>
+                    {pkg.features.length > 0 && (
+                      <ul className="space-y-1 mb-4 text-sm">
+                        {pkg.features.map((feature, idx) => (
+                          <li key={idx} className="flex items-center">
+                            <div className="w-2 h-2 bg-durga-gold rounded-full mr-2" />
+                            {feature}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                  <Button
+                    className="w-full bg-durga-gold hover:bg-durga-gold/90 text-white"
+                    size="lg"
+                    onClick={() => window.open(pkg.displayImage, "_blank")}
+                  >
+                    View Now
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
           ))}
         </div>
       </div>
