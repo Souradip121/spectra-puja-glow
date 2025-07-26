@@ -10,19 +10,19 @@ import { type EmblaOptionsType } from "embla-carousel";
 import Autoplay from "embla-carousel-autoplay";
 
 // Import carousel images
-import carousel1 from "@/assets/carousel/1.jpg";
-import carousel2 from "@/assets/carousel/2.jpg";
-import carousel3 from "@/assets/carousel/3.jpg";
-import carousel4 from "@/assets/carousel/4.jpg";
-import carousel5 from "@/assets/carousel/5.jpg";
-import carousel6 from "@/assets/carousel/6.jpg";
-import carousel7 from "@/assets/carousel/7.jpg";
-import carousel8 from "@/assets/carousel/8.jpg";
-import carousel9 from "@/assets/carousel/9.jpg";
-import carousel10 from "@/assets/carousel/10.jpg";
-import carousel11 from "@/assets/carousel/11.jpg";
-import carousel12 from "@/assets/carousel/12.jpg";
-import carousel13 from "@/assets/carousel/13.jpg";
+import carousel1 from "@/assets/carousel/1.webp";
+import carousel2 from "@/assets/carousel/2.webp";
+import carousel3 from "@/assets/carousel/3.webp";
+import carousel4 from "@/assets/carousel/4.webp";
+import carousel5 from "@/assets/carousel/5.webp";
+import carousel6 from "@/assets/carousel/6.webp";
+import carousel7 from "@/assets/carousel/7.webp";
+import carousel8 from "@/assets/carousel/8.webp";
+import carousel9 from "@/assets/carousel/9.webp";
+import carousel10 from "@/assets/carousel/10.webp";
+import carousel11 from "@/assets/carousel/11.webp";
+import carousel12 from "@/assets/carousel/12.webp";
+import carousel13 from "@/assets/carousel/13.webp";
 
 const Gallery = () => {
   const images = [

@@ -265,11 +265,15 @@ const DurgaPujaArt2025 = () => {
                 </div>
                 <Button
                   className="w-full text-white mt-auto"
-                  style={{ backgroundColor: '#fdd835' }}
+                  style={{ backgroundColor: "#fdd835" }}
                   size="lg"
                   onClick={() => window.open(pkg.pdf, "_blank")}
-                  onMouseEnter={(e) => e.target.style.backgroundColor = '#f9c11d'}
-                  onMouseLeave={(e) => e.target.style.backgroundColor = '#fdd835'}
+                  onMouseEnter={(e) =>
+                    (e.target.style.backgroundColor = "#f9c11d")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.target.style.backgroundColor = "#fdd835")
+                  }
                 >
                   Get Info
                 </Button>
@@ -336,11 +340,15 @@ const DurgaPujaArt2025 = () => {
                   </div>
                   <Button
                     className="w-full text-white"
-                    style={{ backgroundColor: '#fdd835' }}
+                    style={{ backgroundColor: "#fdd835" }}
                     size="lg"
                     onClick={() => window.open(pkg.displayImage, "_blank")}
-                    onMouseEnter={(e) => e.target.style.backgroundColor = '#f9c11d'}
-                    onMouseLeave={(e) => e.target.style.backgroundColor = '#fdd835'}
+                    onMouseEnter={(e) =>
+                      (e.target.style.backgroundColor = "#f9c11d")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.target.style.backgroundColor = "#fdd835")
+                    }
                   >
                     View Now
                   </Button>

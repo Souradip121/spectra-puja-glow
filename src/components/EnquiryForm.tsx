@@ -281,7 +281,9 @@ ${data.name}
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Name *</Label>
+                    <Label htmlFor="name" className="text-black font-medium">
+                      Name *
+                    </Label>
                     <Input
                       id="name"
                       {...register("name")}
@@ -295,7 +297,9 @@ ${data.name}
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email *</Label>
+                    <Label htmlFor="email" className="text-black font-medium">
+                      Email *
+                    </Label>
                     <Input
                       id="email"
                       type="email"
