@@ -15,7 +15,7 @@ const DurgaPujaArt2025 = () => {
       title: "CRUISING INTO PUJA -A MAHALAYA SPECIAL",
       date: "21 September 2025",
       description:
-        "Set sail on a heritage-filled cruise along the Hooghly aboard India's last surviving paddle steamer. Enjoy folk performances, storytelling, Bengali cuisine, and a visit to the Riverine Museum. With cultural games, Puja-themed AV showcases and the festive rhythm of Dhakis, this unique experience captures the sights, sound and spirit of Durga Puja—right on the river.",
+        "Set sail on a heritage-filled cruise along the Hooghly aboard <span style='color: black; font-weight: 500;'>India's last surviving paddle steamer</span>. Enjoy <span style='color: black; font-weight: 500;'>folk performances</span>, <span style='color: black; font-weight: 500;'>storytelling</span>, <span style='color: black; font-weight: 500;'>Bengali cuisine</span>, and a visit to the <span style='color: black; font-weight: 500;'>Riverine Museum</span>. With cultural games, <span style='color: black; font-weight: 500;'>Puja-themed AV showcases</span> and the festive rhythm of <span style='color: black; font-weight: 500;'>Dhakis</span>, this unique experience captures the sights, sound and spirit of Durga Puja—right on the river.",
       features: [],
       image: cruisingintopujaImg,
       displayImage: riverCruiseImg,
@@ -24,7 +24,7 @@ const DurgaPujaArt2025 = () => {
       title: "DURGA PREVIEW EXPRESS",
       date: "19 to 22 September 2025",
       description:
-        "The Durga Preview Express is a curated 10-hour night tour through Kolkata's most spectacular Durga Puja Art installations. Travel in a comfortable AC coach, enjoy a delicious dinner, and explore 10 handpicked pandals. Perfect for Art lovers and festive explorers seeking a safe, crowd-free and immersive cultural experience under the enchanting lights of the Kolkata night.",
+        "The Durga Preview Express is a curated <span style='color: black; font-weight: 500;'>10-hour night tour</span> through Kolkata's most spectacular <span style='color: black; font-weight: 500;'>Durga Puja Art installations</span>. Travel in a <span style='color: black; font-weight: 500;'>comfortable AC coach</span>, enjoy a <span style='color: black; font-weight: 500;'>delicious dinner</span>, and explore <span style='color: black; font-weight: 500;'>10 handpicked pandals</span>. Perfect for Art lovers and festive explorers seeking a <span style='color: black; font-weight: 500;'>safe, crowd-free</span> and immersive cultural experience under the <span style='color: black; font-weight: 500;'>enchanting lights</span> of the Kolkata night.",
       features: [],
       image: durgapujaexpressImg,
       displayImage: previewExpressDisplayImg,
@@ -272,7 +272,7 @@ const DurgaPujaArt2025 = () => {
         {/* Special Packages - 2 cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {specialPackages.map((pkg, index) => (
-            <div key={index}>
+            <div key={index} className="flex flex-col">
               {/* Mobile-only heading for each card */}
               <div className="md:hidden text-center mb-4">
                 <h3 className="text-2xl font-semibold text-foreground">
@@ -284,7 +284,7 @@ const DurgaPujaArt2025 = () => {
                 id={
                   index === 0 ? "cruising-into-puja" : "durga-preview-express"
                 }
-                className="flex flex-col overflow-hidden hover:shadow-xl transition-all duration-300"
+                className="flex flex-col overflow-hidden hover:shadow-xl transition-all duration-300 h-full"
               >
                 <div className="relative h-48 w-full overflow-hidden">
                   <img
@@ -310,9 +310,10 @@ const DurgaPujaArt2025 = () => {
 
                 <CardContent className="px-4 pb-4 flex flex-col flex-1">
                   <div className="flex-1">
-                    <p className="text-sm text-muted-foreground text-center mb-4">
-                      {pkg.description}
-                    </p>
+                    <p
+                      className="text-sm text-muted-foreground text-center mb-4"
+                      dangerouslySetInnerHTML={{ __html: pkg.description }}
+                    />
                     {pkg.features.length > 0 && (
                       <ul className="space-y-1 mb-4 text-sm">
                         {pkg.features.map((feature, idx) => (
