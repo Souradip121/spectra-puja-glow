@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import HeroImage from "@/assets/herofinal.png";
+import HeroImage from "@/assets/hero.webp";
 import massArtLogo from "@/assets/massArt.png";
 
 const Hero = () => {
