@@ -494,7 +494,14 @@ ${data.name}
                 <Button
                   type="submit"
                   size="lg"
-                  className="w-full bg-primary hover:bg-primary/90"
+                  className="w-full text-white"
+                  style={{ backgroundColor: "#fdd835" }}
+                  onMouseEnter={(e) =>
+                    (e.target.style.backgroundColor = "#f9c11d")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.target.style.backgroundColor = "#fdd835")
+                  }
                 >
                   Submit Enquiry
                 </Button>
