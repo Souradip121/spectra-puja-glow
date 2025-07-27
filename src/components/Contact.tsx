@@ -15,7 +15,7 @@ const Contact = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-2xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
           <Card className="text-center bg-white border-border hover:shadow-lg transition-shadow">
             <CardContent className="p-6">
               <div className="inline-flex items-center justify-center w-12 h-12 bg-durga-gold/10 rounded-full mb-4">
@@ -39,7 +39,7 @@ const Contact = () => {
               <div className="inline-flex items-center justify-center w-12 h-12 bg-durga-gold/10 rounded-full mb-4">
                 <Mail className="h-6 w-6 text-durga-gold" />
               </div>
-              <h3 className="font-semibold text-durga-red mb-2">Contact</h3>
+              <h3 className="font-semibold text-durga-red mb-2">Mail Us</h3>
               <p className="text-sm text-muted-foreground">
                 <a
                   href="mailto:mail@spectrainfo.in"
@@ -47,14 +47,23 @@ const Contact = () => {
                 >
                   mail@spectrainfo.in
                 </a>
-                <br />
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="text-center bg-white border-border hover:shadow-lg transition-shadow">
+            <CardContent className="p-6">
+              <div className="inline-flex items-center justify-center w-12 h-12 bg-durga-gold/10 rounded-full mb-4">
+                <Phone className="h-6 w-6 text-durga-gold" />
+              </div>
+              <h3 className="font-semibold text-durga-red mb-2">Call Us</h3>
+              <p className="text-sm text-muted-foreground">
                 <a
                   href="tel:8420797474"
                   className="text-primary hover:underline"
                 >
                   8420797474
                 </a>
-                
                 <br />
                 <a
                   href="tel:7980839680"
