@@ -41,7 +41,7 @@ const DurgaPujaArt2025 = () => {
         "Kolkata Townhall Exhibition",
       ],
       features: [
-        "An extensive cultural deep dive into durga puja and kolkata's soul",
+        "An extensive cultural deep dive into Durga Puja and Kolkata's soul",
         "Ideal for Passionate Art and heritage enthusiasts looking for immersive storytelling",
       ],
       image: img3n4d,
@@ -131,8 +131,8 @@ const DurgaPujaArt2025 = () => {
         <div className="grid lg:grid-cols-2 gap-12 mb-16">
           {/* Left Section - Exclusive Travel Packages */}
           <div>
-            <h3 className="text-2xl font-semibold text-foreground mb-4">
-              Exclusive Travel Packages
+            <h3 className="text-3xl font-semibold text-foreground mb-4">
+              EXCLUSIVE TRAVEL PACKAGES
             </h3>
             <p className="text-lg text-muted-foreground mb-6">
               Experience the Grandeur of Durga Puja — The World's Biggest Public
@@ -226,8 +226,8 @@ const DurgaPujaArt2025 = () => {
                   alt={pkg.title}
                   className="w-full h-full object-cover transition-transform duration-300"
                 />
-                {/* Date at top center */}
-                <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-black/70 text-white px-3 py-1 rounded-md">
+                {/* Date at top left */}
+                <div className="absolute top-4 left-4 text-white">
                   <span className="text-xs font-medium">
                     18th to 22nd September 2025
                   </span>
@@ -305,8 +305,8 @@ const DurgaPujaArt2025 = () => {
                     alt={pkg.title}
                     className="w-full h-full object-cover object-top transition-transform duration-300"
                   />
-                  {/* Date at top center */}
-                  <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-black/70 text-white px-3 py-1 rounded-md">
+                  {/* Date at top left */}
+                  <div className="absolute top-4 left-4 text-white">
                     <span className="text-sm font-medium">{pkg.date}</span>
                   </div>
                   {/* Title at bottom - hidden on mobile */}
