@@ -12,7 +12,7 @@ import {
   Ship,
   Utensils,
 } from "lucide-react";
-import spectraXmassArtposter from "@/assets/SpectraXmassArtposter.png";
+import spectraXmassArtposter from "@/assets/SpectraXmassArt.webp";
 
 const TourPointers = () => {
   const bonediBariFeatures = [

@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { MapPin, Clock, Camera, Users, Shield, Car } from "lucide-react";
-import cruisingintopujaImg from "@/assets/cruisingintopuja.png";
-import durgapujaexpressImg from "@/assets/durgapujaexpress.png";
+import cruisingintopujaImg from "@/assets/cruisingintopuja.webp";
+import durgapujaexpressImg from "@/assets/durgapujaexpress.webp";
 import riverCruiseImg from "@/assets/river-cruise.jpg";
 import previewExpressDisplayImg from "@/assets/previewexpressdisplay.png";
-import img1n2d from "@/assets/1n2d.jpg";
-import img2n3d from "@/assets/2n3d.jpg";
-import img3n4d from "@/assets/3n4d.jpg";
+import img1n2d from "@/assets/1n2d.webp";
+import img2n3d from "@/assets/2n3d.webp";
+import img3n4d from "@/assets/3n4d.webp";
 
 const DurgaPujaArt2025 = () => {
   const specialPackages = [
