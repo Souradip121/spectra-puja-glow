@@ -12,7 +12,7 @@ import {
   Ship,
   Utensils,
 } from "lucide-react";
-import leftImageTourHighlights from "@/assets/leftimageTourHighlights.jpg";
+import spectraXmassArtposter from "@/assets/SpectraXmassArtposter.png";
 
 const TourPointers = () => {
   const bonediBariFeatures = [
@@ -103,8 +103,8 @@ const TourPointers = () => {
           {/* Left Image */}
           <div className="relative">
             <img
-              src={leftImageTourHighlights}
-              alt="Tour Highlights"
+              src={spectraXmassArtposter}
+              alt="Spectra X massArt"
               className="w-full h-full object-cover rounded-lg"
             />
           </div>

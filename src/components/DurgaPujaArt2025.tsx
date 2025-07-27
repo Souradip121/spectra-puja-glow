@@ -228,7 +228,7 @@ const DurgaPujaArt2025 = () => {
                 />
                 {/* Date at top left */}
                 <div className="absolute top-4 left-4 text-white">
-                  <span className="text-xs font-medium">
+                  <span className="font-medium" style={{ fontSize: '16px' }}>
                     18th to 22nd September 2025
                   </span>
                 </div>
@@ -307,7 +307,7 @@ const DurgaPujaArt2025 = () => {
                   />
                   {/* Date at top left */}
                   <div className="absolute top-4 left-4 text-white">
-                    <span className="text-sm font-medium">{pkg.date}</span>
+                    <span className="font-medium" style={{ fontSize: '16px' }}>{pkg.date}</span>
                   </div>
                   {/* Title at bottom - hidden on mobile */}
                   <div className="absolute bottom-4 left-4 text-white hidden md:block">
