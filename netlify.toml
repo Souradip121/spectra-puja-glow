@@ -1,11 +1,7 @@
 [build]
-command = "npm run build"
+command = "npm run build:netlify"
 publish = "dist"
 functions = "netlify/functions"
-
-# Environment variables for build time
-[build.environment]
-VITE_API_URL = "https://your-api-server.onrender.com"  # This should be your actual API server URL when deployed
 
 # Development settings only - these don't affect production
 [dev]
@@ -14,14 +10,18 @@ targetPort = 5173
 port = 8888
 autoLaunch = true
 
-# Handle API requests through Netlify Functions
+# Handle API requests through proxy in production
 [[redirects]]
 from = "/api/*"
-to = "/.netlify/functions/api/:splat"
+to = "https://spectra-api-server.onrender.com/api/:splat"
 status = 200
 force = true
 
 # Handle client-side routing
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
 [[redirects]]
 from = "/*"
 to = "/index.html"

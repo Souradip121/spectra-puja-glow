@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"vite\" \"netlify dev\"",
-    "build": "vite build && npm run build:functions",
-    "build:functions": "netlify build",
+    "dev": "vite",
+    "build": "vite build",
+    "build:netlify": "vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },

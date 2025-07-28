@@ -98,14 +98,16 @@ const EnquiryForm = () => {
     setErrorMessage("");
 
     try {
-      // When deployed on Netlify, use the relative path to the Netlify Function
-      // For local development, use the environment variable or localhost
-      const apiUrl = import.meta.env.DEV
-        ? import.meta.env.VITE_API_URL || "http://localhost:8888" // Development
-        : ""; // Production (empty means use relative URL)
-
-      const apiEndpoint = `${apiUrl}/api/submit-enquiry`;
-
+      // In production, use the configured API endpoint or the default proxy
+      // For local dev, use the environment variable
+      let apiEndpoint = "/api/submit-enquiry";
+      
+      // Only use full URL for local development
+      if (import.meta.env.DEV) {
+        const devApiUrl = import.meta.env.VITE_API_URL || "http://localhost:8888";
+        apiEndpoint = `${devApiUrl}/api/submit-enquiry`;
+      }
+      
       console.log(`Submitting form to: ${apiEndpoint}`);
       setErrorMessage("Submitting your enquiry...");
 

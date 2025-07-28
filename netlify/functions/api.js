@@ -1,16 +1,16 @@
-const express = require('express');
-const serverless = require('serverless-http');
-const cors = require('cors');
-const { Resend } = require('resend');
+// This file is a placeholder for Netlify Functions
+// It's recommended to deploy your API separately for better performance and scalability
 
-// Initialize Express
-const app = express();
-
-// Configure CORS
-app.use(cors());
-app.use(express.json());
-
-// Resend configuration
+exports.handler = async function(event, context) {
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      message: "This is a placeholder API endpoint. For production use, please deploy your server separately and update the redirects in netlify.toml.",
+      status: "ok",
+      timestamp: new Date().toISOString()
+    })
+  };
+};
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const SENDER_EMAIL = process.env.RESEND_SENDER_EMAIL || 'onboarding@resend.dev';
 const resend = new Resend(RESEND_API_KEY);
