@@ -23,7 +23,6 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 // Endpoint to handle form submissions
 app.post('/api/submit-enquiry', async (req, res) => {
     console.log('Received enquiry submission:', JSON.stringify(req.body, null, 2));
-    // Check API key presence
     if (!process.env.RESEND_API_KEY) {
         console.error('RESEND_API_KEY is missing');
         return res.status(500).json({ success: false, message: 'Server configuration error: Email API key missing.' });
@@ -85,7 +84,7 @@ app.post('/api/submit-enquiry', async (req, res) => {
         console.log('Sending email with content:', emailContent);
 
         // Send email to admin and user
-        let resendResult;
+        let resendResult, userResult;
         try {
             // Send to admin
             resendResult = await resend.emails.send({
@@ -97,7 +96,7 @@ app.post('/api/submit-enquiry', async (req, res) => {
             console.log('Resend API response (admin):', resendResult);
 
             // Send copy to user
-            const userResult = await resend.emails.send({
+            userResult = await resend.emails.send({
                 from: 'onboarding@resend.dev',
                 to: email,
                 subject: `Copy of your Durga Puja Tour Enquiry`,
@@ -131,10 +130,13 @@ app.post('/api/submit-enquiry', async (req, res) => {
         if (error && error.stack) {
             console.error('Error stack:', error.stack);
         }
+        // Return the error message for debugging
         res.status(500).json({ success: false, message: 'Failed to submit enquiry. Please try again.', error: error?.message || error });
     }
 });
 
 app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
     console.log(`Server running on port ${PORT}`);
 });
