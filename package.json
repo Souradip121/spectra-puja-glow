@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"npm run server\" \"vite\"",
-    "server": "node server/index.js",
+    "dev": "concurrently \"npm run server:dev\" \"vite\"",
+    "server:dev": "NODE_ENV=development node server/index.js",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
@@ -63,6 +63,7 @@
     "react-router-dom": "^6.26.2",
     "recharts": "^2.12.7",
     "resend": "^2.0.0",
+    "serverless-http": "^3.2.0",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",

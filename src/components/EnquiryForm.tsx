@@ -93,7 +93,9 @@ const EnquiryForm = () => {
 
   const onSubmit = async (data: FormData) => {
     try {
-      const response = await fetch("http://localhost:3001/api/submit-enquiry", {
+      // Use relative URL for API endpoint that works both in dev and production
+      const apiUrl = "/api/submit-enquiry";
+      const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
