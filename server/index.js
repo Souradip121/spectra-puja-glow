@@ -19,6 +19,7 @@ app.use(express.json());
 
 // Resend configuration
 const resend = new Resend(process.env.RESEND_API_KEY);
+const SENDER_EMAIL = process.env.RESEND_SENDER_EMAIL || 'onboarding@resend.dev';
 
 // Endpoint to handle form submissions
 app.post('/api/submit-enquiry', async (req, res) => {
@@ -88,7 +89,7 @@ app.post('/api/submit-enquiry', async (req, res) => {
         try {
             // Send to admin
             resendResult = await resend.emails.send({
-                from: 'onboarding@resend.dev',
+                from: SENDER_EMAIL,
                 to: 'mail@spectrainfo.in',
                 subject: `New Durga Puja Tour Enquiry from ${name}`,
                 html: emailContent,
@@ -97,7 +98,7 @@ app.post('/api/submit-enquiry', async (req, res) => {
 
             // Send copy to user
             userResult = await resend.emails.send({
-                from: 'onboarding@resend.dev',
+                from: SENDER_EMAIL,
                 to: email,
                 subject: `Copy of your Durga Puja Tour Enquiry`,
                 html: `
@@ -138,5 +139,4 @@ app.post('/api/submit-enquiry', async (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
-    console.log(`Server running on port ${PORT}`);
-});
+
