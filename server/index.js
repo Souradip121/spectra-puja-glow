@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-// Import Resend correctly
 const { Resend } = require('resend');
 require('dotenv').config();
 
@@ -39,7 +38,7 @@ app.get('/api/health', (req, res) => {
             hasApiKey: !!process.env.RESEND_API_KEY,
             senderEmail: process.env.RESEND_SENDER_EMAIL || 'onboarding@resend.dev',
             node_env: process.env.NODE_ENV,
-            version: '1.0.2'
+            version: '1.0.3'
         }
     });
 });
@@ -114,22 +113,26 @@ app.post('/api/submit-enquiry', async (req, res) => {
 
         console.log('Sending email with content:', emailContent);
 
-        // Send email to admin first
+        // Send email to admin first - Using the pattern from Resend documentation
         try {
             console.log('Sending admin email');
-            const adminResponse = await resend.emails.send({
+            const adminData = await resend.emails.send({
                 from: SENDER_EMAIL,
                 to: ['mail@spectrainfo.in'],
                 subject: `New Durga Puja Tour Enquiry from ${name}`,
                 html: emailContent,
             });
-            
-            console.log('Admin email sent successfully:', adminResponse);
-            
-            // Then send to user
+
+            if (!adminData || !adminData.id) {
+                throw new Error('Failed to get valid response from Resend API');
+            }
+
+            console.log('Admin email sent successfully:', adminData);
+
+            // Then send to user - Using the pattern from Resend documentation
             try {
                 console.log('Sending user email');
-                const userResponse = await resend.emails.send({
+                const userData = await resend.emails.send({
                     from: SENDER_EMAIL,
                     to: [email],
                     subject: `Copy of your Durga Puja Tour Enquiry`,
@@ -140,14 +143,14 @@ app.post('/api/submit-enquiry', async (req, res) => {
                         <p>We will get back to you soon!</p>
                     `,
                 });
-                
-                console.log('User email sent successfully:', userResponse);
-                
+
+                console.log('User email sent successfully:', userData);
+
                 return res.status(200).json({
                     success: true,
                     message: 'Enquiry submitted successfully!',
-                    adminEmailId: adminResponse?.id,
-                    userEmailId: userResponse?.id
+                    adminEmailId: adminData?.id,
+                    userEmailId: userData?.id
                 });
             } catch (userError) {
                 console.error('Failed to send user email:', userError);
@@ -155,8 +158,8 @@ app.post('/api/submit-enquiry', async (req, res) => {
                 return res.status(200).json({
                     success: true,
                     message: 'Enquiry submitted, but confirmation email failed.',
-                    adminEmailId: adminResponse?.id,
-                    userEmailError: userError?.message || userError
+                    adminEmailId: adminData?.id,
+                    userEmailError: userError?.message || String(userError)
                 });
             }
         } catch (adminError) {
@@ -164,7 +167,7 @@ app.post('/api/submit-enquiry', async (req, res) => {
             return res.status(502).json({
                 success: false,
                 message: 'Email service error (admin).',
-                error: adminError?.message || adminError
+                error: adminError?.message || String(adminError)
             });
         }
     } catch (error) {
@@ -175,7 +178,7 @@ app.post('/api/submit-enquiry', async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Failed to process enquiry. Please try again.',
-            error: error?.message || error,
+            error: error?.message || String(error),
             stack: process.env.NODE_ENV === 'development' ? error?.stack : undefined
         });
     }
@@ -184,21 +187,6 @@ app.post('/api/submit-enquiry', async (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
-    } catch (error) {
-        console.error('Error processing enquiry (outer catch):', error);
-        if (error && error.stack) {
-            console.error('Error stack:', error.stack);
-        }
-        res.status(500).json({
-            success: false,
-            message: 'Failed to process enquiry. Please try again.',
-            error: error?.message || error,
-            stack: process.env.NODE_ENV === 'development' ? error?.stack : undefined
-        });
-    }
-});
+console.error('Error stack:', error.stack);
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
 
