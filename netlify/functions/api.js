@@ -147,17 +147,17 @@ if (process.env.NODE_ENV === 'development') {
 
 // Export the serverless function for Netlify
 exports.handler = serverless(app);
-                error: sendError?.message || sendError
+error: sendError?.message || sendError
             });
         }
     } catch (error) {
-        console.error('Error processing enquiry:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Failed to process enquiry. Please try again.',
-            error: error?.message || error
-        });
-    }
+    console.error('Error processing enquiry:', error);
+    res.status(500).json({
+        success: false,
+        message: 'Failed to process enquiry. Please try again.',
+        error: error?.message || error
+    });
+}
 });
 
 // Export the serverless handler
