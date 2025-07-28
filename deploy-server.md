@@ -21,9 +21,17 @@ Sign up at https://render.com/ if you don't have an account already.
 
 In the Render dashboard, add these environment variables:
 
-- `RESEND_API_KEY`: Your Resend API key
-- `RESEND_SENDER_EMAIL`: Your verified email (or use the default)
+- `RESEND_API_KEY`: Your Resend API key (get it from https://resend.com/api-keys)
+- `RESEND_SENDER_EMAIL`: Your verified email in Resend (or use the default)
 - `NODE_ENV`: production
+
+### Important: Verify Your Email in Resend
+
+1. Log in to your Resend account (https://resend.com)
+2. Go to "Domains & Email" section
+3. Add your domain or verify an email address to use as the sender
+
+Without a verified email, you might encounter "permission denied" errors.
 
 ## 4. Update Netlify Configuration
 
@@ -37,21 +45,35 @@ Go to your Netlify dashboard:
    - Key: `VITE_API_URL`
    - Value: Your Render.com API URL (e.g., `https://spectra-puja-api.onrender.com`)
 
-## 5. Trigger a new Netlify deployment
+## 5. Update netlify.toml
+
+Make sure your netlify.toml file points to your new API:
+
+```toml
+[[redirects]]
+from = "/api/*"
+to = "https://your-render-api-url.onrender.com/api/:splat"
+status = 200
+force = true
+```
+
+## 6. Trigger a new Netlify deployment
 
 In your Netlify dashboard, go to "Deploys" and click "Trigger deploy" > "Deploy site".
 
-## Alternative Options
-
-You can also deploy your server to:
-
-- Vercel
-- Heroku
-- Railway
-- DigitalOcean App Platform
-
-Each platform has similar steps: deploy your server code and set the environment variables.
-
 ## Testing
 
-After deployment, visit `https://your-api-url/api/health` to verify your server is running correctly.
+After deployment:
+
+1. Visit `https://your-api-url/api/health` to verify your server is running correctly.
+2. Check that environment variables are properly set by looking at the response.
+3. Submit a test form to verify the entire process works.
+
+## Troubleshooting
+
+If you're still having issues:
+
+1. **Check the Logs**: In Render.com dashboard, check the logs for error messages
+2. **Test Email Sending**: Try sending a test email directly using the Resend API
+3. **API Key Permissions**: Verify your Resend API key has sending permissions
+4. **CORS Issues**: Check if there are CORS errors in the browser console

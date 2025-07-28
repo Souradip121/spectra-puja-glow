@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+// Import Resend correctly
 const { Resend } = require('resend');
 require('dotenv').config();
 
@@ -38,7 +39,7 @@ app.get('/api/health', (req, res) => {
             hasApiKey: !!process.env.RESEND_API_KEY,
             senderEmail: process.env.RESEND_SENDER_EMAIL || 'onboarding@resend.dev',
             node_env: process.env.NODE_ENV,
-            version: '1.0.1'
+            version: '1.0.2'
         }
     });
 });
@@ -113,77 +114,76 @@ app.post('/api/submit-enquiry', async (req, res) => {
 
         console.log('Sending email with content:', emailContent);
 
-        // Define email requests outside try/catch block
-        const adminEmailRequest = {
-            from: SENDER_EMAIL,
-            to: ['mail@spectrainfo.in'], // Ensure this is an array
-            subject: `New Durga Puja Tour Enquiry from ${name}`,
-            html: emailContent,
-        };
-
-        const userEmailRequest = {
-            from: SENDER_EMAIL,
-            to: [email], // Ensure this is an array
-            subject: `Copy of your Durga Puja Tour Enquiry`,
-            html: `
-                <p>Dear ${name},</p>
-                <p>Thank you for your enquiry. Here is a copy of your submission:</p>
-                ${emailContent}
-                <p>We will get back to you soon!</p>
-            `,
-        };
-
-        // Attempt to send emails
+        // Send email to admin first
         try {
-            // Send to admin first
-            console.log('Sending admin email:', JSON.stringify(adminEmailRequest, null, 2));
-            const { data: adminResponse, error: adminError } = await resend.emails.send(adminEmailRequest);
-
-            if (adminError) {
-                console.error('Resend API error (admin):', adminError);
-                return res.status(502).json({
-                    success: false,
-                    message: 'Email service error (admin).',
-                    error: adminError
-                });
-            }
-
+            console.log('Sending admin email');
+            const adminResponse = await resend.emails.send({
+                from: SENDER_EMAIL,
+                to: ['mail@spectrainfo.in'],
+                subject: `New Durga Puja Tour Enquiry from ${name}`,
+                html: emailContent,
+            });
+            
             console.log('Admin email sent successfully:', adminResponse);
-
+            
             // Then send to user
-            console.log('Sending user email:', JSON.stringify(userEmailRequest, null, 2));
-            const { data: userResponse, error: userError } = await resend.emails.send(userEmailRequest);
-
-            if (userError) {
-                console.error('Resend API error (user):', userError);
+            try {
+                console.log('Sending user email');
+                const userResponse = await resend.emails.send({
+                    from: SENDER_EMAIL,
+                    to: [email],
+                    subject: `Copy of your Durga Puja Tour Enquiry`,
+                    html: `
+                        <p>Dear ${name},</p>
+                        <p>Thank you for your enquiry. Here is a copy of your submission:</p>
+                        ${emailContent}
+                        <p>We will get back to you soon!</p>
+                    `,
+                });
+                
+                console.log('User email sent successfully:', userResponse);
+                
+                return res.status(200).json({
+                    success: true,
+                    message: 'Enquiry submitted successfully!',
+                    adminEmailId: adminResponse?.id,
+                    userEmailId: userResponse?.id
+                });
+            } catch (userError) {
+                console.error('Failed to send user email:', userError);
                 // Still return success since admin email was sent
                 return res.status(200).json({
                     success: true,
                     message: 'Enquiry submitted, but confirmation email failed.',
                     adminEmailId: adminResponse?.id,
-                    userEmailError: userError
+                    userEmailError: userError?.message || userError
                 });
             }
-
-            console.log('User email sent successfully:', userResponse);
-
-            // Both emails sent successfully
-            return res.status(200).json({
-                success: true,
-                message: 'Enquiry submitted successfully!',
-                adminEmailId: adminResponse?.id,
-                userEmailId: userResponse?.id
-            });
-
-        } catch (sendError) {
-            console.error('Resend API error (catch):', sendError);
+        } catch (adminError) {
+            console.error('Failed to send admin email:', adminError);
             return res.status(502).json({
                 success: false,
-                message: 'Email service error.',
-                error: sendError?.message || sendError,
-                stack: process.env.NODE_ENV === 'development' ? sendError?.stack : undefined
+                message: 'Email service error (admin).',
+                error: adminError?.message || adminError
             });
         }
+    } catch (error) {
+        console.error('Error processing enquiry (outer catch):', error);
+        if (error && error.stack) {
+            console.error('Error stack:', error.stack);
+        }
+        res.status(500).json({
+            success: false,
+            message: 'Failed to process enquiry. Please try again.',
+            error: error?.message || error,
+            stack: process.env.NODE_ENV === 'development' ? error?.stack : undefined
+        });
+    }
+});
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
     } catch (error) {
         console.error('Error processing enquiry (outer catch):', error);
         if (error && error.stack) {
