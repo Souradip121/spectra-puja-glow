@@ -109,15 +109,19 @@ app.post('/api/submit-enquiry', async (req, res) => {
                 `,
             });
             console.log('Resend API response (user):', userResult);
+
+            // Check for errors in resendResult or userResult
+            if ((resendResult && resendResult.error) || (userResult && userResult.error)) {
+                console.error('Resend API returned error:', resendResult?.error || userResult?.error);
+                return res.status(502).json({
+                    success: false,
+                    message: 'Email service error.',
+                    error: resendResult?.error || userResult?.error
+                });
+            }
         } catch (sendError) {
             console.error('Resend API error:', sendError);
-            return res.status(502).json({ success: false, message: 'Email service error.' });
-        }
-
-        // Check for errors in resendResult if applicable
-        if (resendResult && resendResult.error) {
-            console.error('Resend API returned error:', resendResult.error);
-            return res.status(502).json({ success: false, message: 'Email service error.' });
+            return res.status(502).json({ success: false, message: 'Email service error.', error: sendError?.message || sendError });
         }
 
         console.log('Email sent successfully.');
@@ -127,7 +131,7 @@ app.post('/api/submit-enquiry', async (req, res) => {
         if (error && error.stack) {
             console.error('Error stack:', error.stack);
         }
-        res.status(500).json({ success: false, message: 'Failed to submit enquiry. Please try again.' });
+        res.status(500).json({ success: false, message: 'Failed to submit enquiry. Please try again.', error: error?.message || error });
     }
 });
 
