@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -37,6 +37,10 @@ const formSchema = z
       from: z.date(),
       to: z.date().optional(),
     }),
+    numberOfPeople: z
+      .number({ invalid_type_error: "Number of people is required" })
+      .min(1, "Minimum 1 person required")
+      .max(50, "Maximum 50 people allowed"),
     message: z.string().optional(),
   })
   .refine(
@@ -57,6 +61,7 @@ type FormData = z.infer<typeof formSchema>;
 const EnquiryForm = () => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const {
     register,
@@ -66,92 +71,58 @@ const EnquiryForm = () => {
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      numberOfPeople: 1,
+    },
   });
 
   const watchedTour = watch("interestedTour");
   const watchedPackage = watch("travelPackage");
 
+  // Add/remove blur effect on body when modal is shown
+  useEffect(() => {
+    if (showModal) {
+      document.body.classList.add("modal-blur");
+    } else {
+      document.body.classList.remove("modal-blur");
+    }
+    return () => {
+      document.body.classList.remove("modal-blur");
+    };
+  }, [showModal]);
+
   const onSubmit = async (data: FormData) => {
     try {
-      // Format the travel date
-      let formattedDate = "";
-      if (data.travelDate?.from) {
-        const fromDate = new Date(data.travelDate.from).toLocaleDateString(
-          "en-US",
-          {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          }
-        );
-
-        if (data.travelDate.to) {
-          const toDate = new Date(data.travelDate.to).toLocaleDateString(
-            "en-US",
-            {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            }
-          );
-          formattedDate = `${fromDate} - ${toDate}`;
-        } else {
-          formattedDate = fromDate;
-        }
-      }
-
-      // Create email content
-      const subject = encodeURIComponent(
-        `Durga Puja Tour Enquiry from ${data.name}`
-      );
-      const body = encodeURIComponent(`
-Dear Team,
-
-I would like to enquire about your Durga Puja tours. Here are my details:
-
-Name: ${data.name}
-Email: ${data.email}
-Phone: ${data.phone}
-Interested Tour: ${data.interestedTour}
-${data.travelPackage ? `Travel Package: ${data.travelPackage}` : ""}
-${formattedDate ? `Preferred Travel Date: ${formattedDate}` : ""}
-${data.message ? `Additional Message: ${data.message}` : ""}
-
-Submitted on: ${new Date().toLocaleString()}
-
-Best regards,
-${data.name}
-      `);
-
-      // Create mailto link
-      const mailtoLink = `mailto:souradip1000@gmail.com?subject=${subject}&body=${body}`;
-
-      // Open email client
-      window.location.href = mailtoLink;
-
-      // Show success message
-      toast({
-        title: "Enquiry Prepared!",
-        description:
-          "Your email client will open with the enquiry details. Please send the email to complete your submission.",
+      const response = await fetch("http://localhost:3001/api/submit-enquiry", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
       });
 
-      // Reset form after a short delay
-      setTimeout(() => {
-        setDateRange(undefined);
-        setValue("name", "");
-        setValue("email", "");
-        setValue("phone", "");
-        setValue("interestedTour", "");
-        setValue("travelPackage", "");
-        setValue("message", "");
-      }, 2000);
+      if (response.ok) {
+        setShowModal(true);
+        // Reset form after a short delay
+        setTimeout(() => {
+          setDateRange(undefined);
+          setValue("name", "");
+          setValue("email", "");
+          setValue("phone", "");
+          setValue("interestedTour", "");
+          setValue("travelPackage", "");
+          setValue("numberOfPeople", 1);
+          setValue("message", "");
+        }, 2000);
+      } else {
+        throw new Error("Failed to submit enquiry");
+      }
     } catch (error) {
       console.error("Error submitting enquiry:", error);
       toast({
         title: "Submission Failed",
         description:
-          "Please try again or contact us directly at souradip1000@gmail.com",
+          "Please try again or contact us directly at mail@spectrainfo.in",
         variant: "destructive",
       });
     }
@@ -264,254 +235,308 @@ ${data.name}
   };
 
   return (
-    <section id="enquiry" className="py-20 bg-durga-cream/20">
-      <div className="container mx-auto px-4">
-        <div className="max-w-2xl mx-auto">
-          <Card className="bg-background border-border">
-            <CardHeader className="text-center">
-              <CardTitle className="text-3xl font-bold text-foreground">
-                Book Your Durga Puja Experience
-              </CardTitle>
-              <p className="text-muted-foreground">
-                Fill out the form below and we'll create your perfect cultural
-                journey
-              </p>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-4">
+    <>
+      {/* Modal for submission success */}
+      {showModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40"
+          style={{ backdropFilter: "blur(4px)" }}
+        >
+          <div className="bg-white rounded-lg shadow-lg p-8 max-w-sm mx-auto text-center">
+            <h2 className="text-2xl font-bold mb-2 text-green-700">
+              Enquiry Submitted!
+            </h2>
+            <p className="mb-6">
+              Your enquiry has been successfully submitted.
+            </p>
+            <Button
+              onClick={() => setShowModal(false)}
+              className="w-full"
+              style={{ backgroundColor: "#fdd835", color: "#222" }}
+            >
+              Close
+            </Button>
+          </div>
+        </div>
+      )}
+      <section id="enquiry" className="py-20 bg-durga-cream/20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-2xl mx-auto">
+            <Card className="bg-background border-border">
+              <CardHeader className="text-center">
+                <CardTitle className="text-3xl font-bold text-foreground">
+                  Book Your Durga Puja Experience
+                </CardTitle>
+                <p className="text-muted-foreground">
+                  Fill out the form below and we'll create your perfect cultural
+                  journey
+                </p>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="name">Name *</Label>
+                      <Input
+                        id="name"
+                        {...register("name")}
+                        className={errors.name ? "border-destructive" : ""}
+                      />
+                      {errors.name && (
+                        <p className="text-sm text-destructive">
+                          {errors.name.message}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email *</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        {...register("email")}
+                        className={errors.email ? "border-destructive" : ""}
+                      />
+                      {errors.email && (
+                        <p className="text-sm text-destructive">
+                          {errors.email.message}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
                   <div className="space-y-2">
-                    <Label htmlFor="name">Name *</Label>
+                    <Label htmlFor="phone">Phone Number *</Label>
                     <Input
-                      id="name"
-                      {...register("name")}
-                      className={errors.name ? "border-destructive" : ""}
+                      id="phone"
+                      {...register("phone")}
+                      className={errors.phone ? "border-destructive" : ""}
                     />
-                    {errors.name && (
+                    {errors.phone && (
                       <p className="text-sm text-destructive">
-                        {errors.name.message}
+                        {errors.phone.message}
                       </p>
                     )}
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email *</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      {...register("email")}
-                      className={errors.email ? "border-destructive" : ""}
-                    />
-                    {errors.email && (
-                      <p className="text-sm text-destructive">
-                        {errors.email.message}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Phone Number *</Label>
-                  <Input
-                    id="phone"
-                    {...register("phone")}
-                    className={errors.phone ? "border-destructive" : ""}
-                  />
-                  {errors.phone && (
-                    <p className="text-sm text-destructive">
-                      {errors.phone.message}
-                    </p>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="interestedTour">Interested Tour *</Label>
-                  <Select
-                    onValueChange={(value) => {
-                      setValue("interestedTour", value);
-                      // Auto-set date for Cruising Into Puja
-                      if (value === "cruising-through-puja") {
-                        const fixedDate = new Date(2025, 8, 21); // September 21, 2025
-                        const range = { from: fixedDate, to: undefined };
-                        setDateRange(range);
-                        setValue("travelDate", range);
-                      } else {
-                        // Reset date for other tours
-                        setDateRange(undefined);
-                      }
-                    }}
-                  >
-                    <SelectTrigger
-                      className={
-                        errors.interestedTour ? "border-destructive" : ""
-                      }
-                    >
-                      <SelectValue placeholder="Select a tour" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="tour-packages">
-                        Travel Packages
-                      </SelectItem>
-                      <SelectItem value="cruising-through-puja">
-                        Cruising Into Puja
-                      </SelectItem>
-                      <SelectItem value="durga-preview-express">
-                        Durga Preview Express
-                      </SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  {errors.interestedTour && (
-                    <p className="text-sm text-destructive">
-                      {errors.interestedTour.message}
-                    </p>
-                  )}
-                </div>
-
-                {watchedTour === "tour-packages" && (
-                  <div className="space-y-2">
-                    <Label htmlFor="travelPackage">Travel Package *</Label>
+                    <Label htmlFor="interestedTour">Interested Tour *</Label>
                     <Select
                       onValueChange={(value) => {
-                        setValue("travelPackage", value);
-                        // Reset date range when package changes
-                        setDateRange(undefined);
-                        setValue("travelDate", {
-                          from: new Date(),
-                          to: undefined,
-                        });
-                      }}
-                    >
-                      <SelectTrigger
-                        className={
-                          errors.travelPackage ? "border-destructive" : ""
-                        }
-                      >
-                        <SelectValue placeholder="Select travel package" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="3n-4d">3 Nights & 4 Days</SelectItem>
-                        <SelectItem value="2n-3d">2 Nights & 3 Days</SelectItem>
-                        <SelectItem value="1n-2d">1 Night & 2 Days</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {errors.travelPackage && (
-                      <p className="text-sm text-destructive">
-                        {errors.travelPackage.message}
-                      </p>
-                    )}
-                  </div>
-                )}
-
-                {/* Only show date selection for tours that need it */}
-                {watchedTour && watchedTour !== "other" && (
-                  <div className="space-y-2">
-                    <Label>Preferred Travel Date *</Label>
-                    <Popover
-                      open={
-                        watchedTour === "cruising-through-puja"
-                          ? false
-                          : isCalendarOpen
-                      }
-                      onOpenChange={(open) => {
-                        if (watchedTour === "cruising-through-puja") return; // Don't allow opening for cruising tour
-                        setIsCalendarOpen(open);
-                        // Only reset date selection for tour packages when calendar opens
-                        if (open && watchedTour === "tour-packages") {
+                        setValue("interestedTour", value);
+                        // Auto-set date for Cruising Into Puja
+                        if (value === "cruising-through-puja") {
+                          const fixedDate = new Date(2025, 8, 21); // September 21, 2025
+                          const range = { from: fixedDate, to: undefined };
+                          setDateRange(range);
+                          setValue("travelDate", range);
+                        } else {
+                          // Reset date for other tours
                           setDateRange(undefined);
                         }
                       }}
                     >
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          disabled={watchedTour === "cruising-through-puja"}
-                          className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !dateRange?.from && "text-muted-foreground",
-                            errors.travelDate && "border-destructive",
-                            watchedTour === "cruising-through-puja" &&
-                              "cursor-not-allowed opacity-75"
-                          )}
-                        >
-                          <CalendarIcon className="mr-2 h-4 w-4" />
-                          {formatDateRange(dateRange)}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <CalendarComponent
-                          mode={
-                            watchedTour === "tour-packages" ? "range" : "single"
-                          }
-                          selected={
-                            watchedTour === "tour-packages"
-                              ? dateRange
-                              : dateRange?.from
-                          }
-                          onSelect={handleDateSelect}
-                          disabled={isDateDisabled}
-                          defaultMonth={new Date(2025, 8)} // September 2025 (month is 0-based)
-                          initialFocus
-                          className="p-3 pointer-events-auto"
-                          numberOfMonths={1}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    {errors.travelDate && (
+                      <SelectTrigger
+                        className={
+                          errors.interestedTour ? "border-destructive" : ""
+                        }
+                      >
+                        <SelectValue placeholder="Select a tour" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="tour-packages">
+                          Travel Packages
+                        </SelectItem>
+                        <SelectItem value="cruising-through-puja">
+                          Cruising Into Puja
+                        </SelectItem>
+                        <SelectItem value="durga-preview-express">
+                          Durga Preview Express
+                        </SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {errors.interestedTour && (
                       <p className="text-sm text-destructive">
-                        Travel date is required
-                      </p>
-                    )}
-                    {watchedTour === "tour-packages" && watchedPackage && (
-                      <p className="text-xs text-muted-foreground">
-                        Select start date for your{" "}
-                        {getPackageDays(watchedPackage)}-day package
-                      </p>
-                    )}
-                    {watchedTour === "cruising-through-puja" && (
-                      <p className="text-xs text-muted-foreground">
-                        Date is fixed for September 21, 2025
-                      </p>
-                    )}
-                    {watchedTour === "durga-preview-express" && (
-                      <p className="text-xs text-muted-foreground">
-                        Select any date between 19th and 22nd September 2025
+                        {errors.interestedTour.message}
                       </p>
                     )}
                   </div>
-                )}
 
-                <div className="space-y-2">
-                  <Label htmlFor="message">Additional Message</Label>
-                  <Textarea
-                    id="message"
-                    {...register("message")}
-                    placeholder="Any special requirements or questions..."
-                    rows={4}
-                  />
-                </div>
+                  {watchedTour === "tour-packages" && (
+                    <div className="space-y-2">
+                      <Label htmlFor="travelPackage">Travel Package *</Label>
+                      <Select
+                        onValueChange={(value) => {
+                          setValue("travelPackage", value);
+                          // Reset date range when package changes
+                          setDateRange(undefined);
+                          setValue("travelDate", {
+                            from: new Date(),
+                            to: undefined,
+                          });
+                        }}
+                      >
+                        <SelectTrigger
+                          className={
+                            errors.travelPackage ? "border-destructive" : ""
+                          }
+                        >
+                          <SelectValue placeholder="Select travel package" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="3n-4d">3 Nights & 4 Days</SelectItem>
+                          <SelectItem value="2n-3d">2 Nights & 3 Days</SelectItem>
+                          <SelectItem value="1n-2d">1 Night & 2 Days</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      {errors.travelPackage && (
+                        <p className="text-sm text-destructive">
+                          {errors.travelPackage.message}
+                        </p>
+                      )}
+                    </div>
+                  )}
 
-                <Button
-                  type="submit"
-                  size="lg"
-                  className="w-full text-white"
-                  style={{ backgroundColor: "#fdd835" }}
-                  onMouseEnter={(e) =>
-                    (e.target.style.backgroundColor = "#f9c11d")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.target.style.backgroundColor = "#fdd835")
-                  }
-                >
-                  Submit Enquiry
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
+                  {/* Only show date selection for tours that need it */}
+                  {watchedTour && watchedTour !== "other" && (
+                    <div className="space-y-2">
+                      <Label>Preferred Travel Date *</Label>
+                      <Popover
+                        open={
+                          watchedTour === "cruising-through-puja"
+                            ? false
+                            : isCalendarOpen
+                        }
+                        onOpenChange={(open) => {
+                          if (watchedTour === "cruising-through-puja") return; // Don't allow opening for cruising tour
+                          setIsCalendarOpen(open);
+                          // Only reset date selection for tour packages when calendar opens
+                          if (open && watchedTour === "tour-packages") {
+                            setDateRange(undefined);
+                          }
+                        }}
+                      >
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            disabled={watchedTour === "cruising-through-puja"}
+                            className={cn(
+                              "w-full justify-start text-left font-normal",
+                              !dateRange?.from && "text-muted-foreground",
+                              errors.travelDate && "border-destructive",
+                              watchedTour === "cruising-through-puja" &&
+                                "cursor-not-allowed opacity-75"
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {formatDateRange(dateRange)}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <CalendarComponent
+                            mode={
+                              watchedTour === "tour-packages" ? "range" : "single"
+                            }
+                            selected={
+                              watchedTour === "tour-packages"
+                                ? dateRange
+                                : dateRange?.from
+                            }
+                            onSelect={handleDateSelect}
+                            disabled={isDateDisabled}
+                            defaultMonth={new Date(2025, 8)} // September 2025 (month is 0-based)
+                            initialFocus
+                            className="p-3 pointer-events-auto"
+                            numberOfMonths={1}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      {errors.travelDate && (
+                        <p className="text-sm text-destructive">
+                          Travel date is required
+                        </p>
+                      )}
+                      {watchedTour === "tour-packages" && watchedPackage && (
+                        <p className="text-xs text-muted-foreground">
+                          Select start date for your{" "}
+                          {getPackageDays(watchedPackage)}-day package
+                        </p>
+                      )}
+                      {watchedTour === "cruising-through-puja" && (
+                        <p className="text-xs text-muted-foreground">
+                          Date is fixed for September 21, 2025
+                        </p>
+                      )}
+                      {watchedTour === "durga-preview-express" && (
+                        <p className="text-xs text-muted-foreground">
+                          Select any date between 19th and 22nd September 2025
+                        </p>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Number of People field */}
+                  <div className="space-y-2">
+                    <Label htmlFor="numberOfPeople">Number of People *</Label>
+                    <Input
+                      id="numberOfPeople"
+                      type="number"
+                      min={1}
+                      max={50}
+                      {...register("numberOfPeople", { valueAsNumber: true })}
+                      className={errors.numberOfPeople ? "border-destructive" : ""}
+                    />
+                    {errors.numberOfPeople && (
+                      <p className="text-sm text-destructive">
+                        {errors.numberOfPeople.message}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Additional Message field */}
+                  <div className="space-y-2">
+                    <Label htmlFor="message">Additional Message</Label>
+                    <Textarea
+                      id="message"
+                      {...register("message")}
+                      placeholder="Any special requirements or questions..."
+                      rows={4}
+                    />
+                  </div>
+
+                  <Button
+                    type="submit"
+                    size="lg"
+                    className="w-full text-white"
+                    style={{ backgroundColor: "#fdd835" }}
+                    onMouseEnter={(e) =>
+                      (e.target.style.backgroundColor = "#f9c11d")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.target.style.backgroundColor = "#fdd835")
+                    }
+                  >
+                    Submit Enquiry
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 
+// Add blur effect CSS globally (add this to your global CSS file)
+/*
+.modal-blur > #root {
+  filter: blur(4px);
+}
+*/
+
 export default EnquiryForm;
+
+
+

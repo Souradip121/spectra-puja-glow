@@ -5,7 +5,7 @@ const About = () => {
     {
       title: "Official Travel Partner",
       description:
-        "Official Travel Partner of massArt – Get exclusive access to world biggest public Art festival - Durga Puja.",
+        "Official Travel Partner of massArt – Get exclusive access to world's biggest public Art festival - Durga Puja.",
     },
     {
       title: "Personal Touch",
