@@ -385,9 +385,15 @@ const EnquiryForm = () => {
                           <SelectValue placeholder="Select travel package" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="3n-4d">3 Nights & 4 Days</SelectItem>
-                          <SelectItem value="2n-3d">2 Nights & 3 Days</SelectItem>
-                          <SelectItem value="1n-2d">1 Night & 2 Days</SelectItem>
+                          <SelectItem value="3n-4d">
+                            3 Nights & 4 Days
+                          </SelectItem>
+                          <SelectItem value="2n-3d">
+                            2 Nights & 3 Days
+                          </SelectItem>
+                          <SelectItem value="1n-2d">
+                            1 Night & 2 Days
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                       {errors.travelPackage && (
@@ -436,7 +442,9 @@ const EnquiryForm = () => {
                         <PopoverContent className="w-auto p-0" align="start">
                           <CalendarComponent
                             mode={
-                              watchedTour === "tour-packages" ? "range" : "single"
+                              watchedTour === "tour-packages"
+                                ? "range"
+                                : "single"
                             }
                             selected={
                               watchedTour === "tour-packages"
@@ -485,7 +493,9 @@ const EnquiryForm = () => {
                       min={1}
                       max={50}
                       {...register("numberOfPeople", { valueAsNumber: true })}
-                      className={errors.numberOfPeople ? "border-destructive" : ""}
+                      className={
+                        errors.numberOfPeople ? "border-destructive" : ""
+                      }
                     />
                     {errors.numberOfPeople && (
                       <p className="text-sm text-destructive">
@@ -537,6 +547,3 @@ const EnquiryForm = () => {
 */
 
 export default EnquiryForm;
-
-
-

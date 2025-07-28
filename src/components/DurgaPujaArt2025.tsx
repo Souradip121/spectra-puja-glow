@@ -131,7 +131,7 @@ const DurgaPujaArt2025 = () => {
         <div className="grid lg:grid-cols-2 gap-12 mb-16">
           {/* Left Section - Exclusive Travel Packages */}
           <div>
-            <h3 className="text-3xl font-semibold text-foreground mb-4">
+            <h3 className="text-3xl font-semibold text-foreground mb-4 text-left md:text-left text-center">
               EXCLUSIVE TRAVEL PACKAGES
             </h3>
             <p className="text-lg text-muted-foreground mb-6">
