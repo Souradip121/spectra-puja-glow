@@ -85,19 +85,27 @@ app.post('/api/submit-enquiry', async (req, res) => {
         console.log('Sending email with content:', emailContent);
 
         // Send email to admin and user
-        let resendResult, userResult;
+        let adminResponse, userResponse;
         try {
             // Send to admin
-            resendResult = await resend.emails.send({
+            ({ data: adminResponse, error: adminError } = await resend.emails.send({
                 from: SENDER_EMAIL,
                 to: 'mail@spectrainfo.in',
                 subject: `New Durga Puja Tour Enquiry from ${name}`,
                 html: emailContent,
-            });
-            console.log('Resend API response (admin):', resendResult);
+            }));
+            console.log('Resend API response (admin):', adminResponse);
+            if (adminError) {
+                console.error('Resend API error (admin):', adminError);
+                return res.status(502).json({
+                    success: false,
+                    message: 'Email service error (admin).',
+                    error: adminError
+                });
+            }
 
             // Send copy to user
-            userResult = await resend.emails.send({
+            ({ data: userResponse, error: userError } = await resend.emails.send({
                 from: SENDER_EMAIL,
                 to: email,
                 subject: `Copy of your Durga Puja Tour Enquiry`,
@@ -107,16 +115,14 @@ app.post('/api/submit-enquiry', async (req, res) => {
                     ${emailContent}
                     <p>We will get back to you soon!</p>
                 `,
-            });
-            console.log('Resend API response (user):', userResult);
-
-            // Check for errors in resendResult or userResult
-            if ((resendResult && resendResult.error) || (userResult && userResult.error)) {
-                console.error('Resend API returned error:', resendResult?.error || userResult?.error);
+            }));
+            console.log('Resend API response (user):', userResponse);
+            if (userError) {
+                console.error('Resend API error (user):', userError);
                 return res.status(502).json({
                     success: false,
-                    message: 'Email service error.',
-                    error: resendResult?.error || userResult?.error
+                    message: 'Email service error (user).',
+                    error: userError
                 });
             }
         } catch (sendError) {
