@@ -85,16 +85,16 @@ app.post('/api/submit-enquiry', async (req, res) => {
         console.log('Sending email with content:', emailContent);
 
         // Send email to admin and user
-        let adminResponse, userResponse;
+        let adminResponse, adminError, userResponse, userError;
         try {
-            // Send to admin
             ({ data: adminResponse, error: adminError } = await resend.emails.send({
                 from: SENDER_EMAIL,
                 to: 'mail@spectrainfo.in',
                 subject: `New Durga Puja Tour Enquiry from ${name}`,
                 html: emailContent,
             }));
-            console.log('Resend API response (admin):', adminResponse);
+            console.log('Resend API response (admin):', adminResponse, adminError);
+
             if (adminError) {
                 console.error('Resend API error (admin):', adminError);
                 return res.status(502).json({
@@ -104,7 +104,6 @@ app.post('/api/submit-enquiry', async (req, res) => {
                 });
             }
 
-            // Send copy to user
             ({ data: userResponse, error: userError } = await resend.emails.send({
                 from: SENDER_EMAIL,
                 to: email,
@@ -116,7 +115,8 @@ app.post('/api/submit-enquiry', async (req, res) => {
                     <p>We will get back to you soon!</p>
                 `,
             }));
-            console.log('Resend API response (user):', userResponse);
+            console.log('Resend API response (user):', userResponse, userError);
+
             if (userError) {
                 console.error('Resend API error (user):', userError);
                 return res.status(502).json({
@@ -126,18 +126,17 @@ app.post('/api/submit-enquiry', async (req, res) => {
                 });
             }
         } catch (sendError) {
-            console.error('Resend API error:', sendError);
+            console.error('Resend API error (catch):', sendError);
             return res.status(502).json({ success: false, message: 'Email service error.', error: sendError?.message || sendError });
         }
 
         console.log('Email sent successfully.');
         res.status(200).json({ success: true, message: 'Enquiry submitted successfully!' });
     } catch (error) {
-        console.error('Error sending email:', error);
+        console.error('Error sending email (outer catch):', error);
         if (error && error.stack) {
             console.error('Error stack:', error.stack);
         }
-        // Return the error message for debugging
         res.status(500).json({ success: false, message: 'Failed to submit enquiry. Please try again.', error: error?.message || error });
     }
 });
