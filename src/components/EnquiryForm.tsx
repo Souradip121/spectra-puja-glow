@@ -93,13 +93,16 @@ const EnquiryForm = () => {
 
   const onSubmit = async (data: FormData) => {
     try {
-      const response = await fetch("http://localhost:3001/api/submit-enquiry", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        "/api/submit-enquiry", // <-- use relative path
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       if (response.ok) {
         setShowModal(true);
