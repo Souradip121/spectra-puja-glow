@@ -90,54 +90,41 @@ app.post('/api/submit-enquiry', async (req, res) => {
 
         console.log('Sending email with content:', emailContent);
 
-        // Send email to admin and user
-        let resendResult;
-        try {
-            // Send to admin
-            resendResult = await resend.emails.send({
-                from: 'onboarding@resend.dev',
-                to: 'mail@spectrainfo.in',
-                subject: `New Durga Puja Tour Enquiry from ${name}`,
-                html: emailContent,
-            });
-            console.log('Resend API response (admin):', resendResult);
+        // Send email to admin
+        const resendResult = await resend.emails.send({
+            from: 'onboarding@resend.dev',
+            to: 'mail@spectrainfo.in',
+            subject: `New Durga Puja Tour Enquiry from ${name}`,
+            html: emailContent,
+        });
+        console.log('Resend API response (admin):', resendResult);
 
-            // Send copy to user
-            const userResult = await resend.emails.send({
-                from: 'onboarding@resend.dev',
-                to: email,
-                subject: `Copy of your Durga Puja Tour Enquiry`,
-                html: `
-                    <p>Dear ${name},</p>
-                    <p>Thank you for your enquiry. Here is a copy of your submission:</p>
-                    ${emailContent}
-                    <p>We will get back to you soon!</p>
-                `,
-            });
-            console.log('Resend API response (user):', userResult);
-        } catch (sendError) {
-            console.error('Resend API error:', sendError);
-            return res.status(502).json({ success: false, message: 'Email service error.' });
-        }
+        // Send copy to user
+        const userResult = await resend.emails.send({
+            from: 'onboarding@resend.dev',
+            to: email,
+            subject: `Copy of your Durga Puja Tour Enquiry`,
+            html: `
+                <p>Dear ${name},</p>
+                <p>Thank you for your enquiry. Here is a copy of your submission:</p>
+                ${emailContent}
+                <p>We will get back to you soon!</p>
+            `,
+        });
+        console.log('Resend API response (user):', userResult);
 
-        // Check for errors in resendResult if applicable
-        if (resendResult && resendResult.error) {
-            console.error('Resend API returned error:', resendResult.error);
-            return res.status(502).json({ success: false, message: 'Email service error.' });
-        }
-
-        console.log('Email sent successfully.');
         res.status(200).json({ success: true, message: 'Enquiry submitted successfully!' });
     } catch (error) {
-        console.error('Error sending email:', error);
-        if (error && error.stack) {
-            console.error('Error stack:', error.stack);
-        }
-        res.status(500).json({ success: false, message: 'Failed to submit enquiry. Please try again.' });
+        console.error('Error processing enquiry:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to process enquiry. Please try again.',
+            error: error?.message || error
+        });
     }
 });
 
-// For local development support
+// For local development
 if (process.env.NODE_ENV === 'development') {
     const PORT = process.env.PORT || 3001;
     app.listen(PORT, () => {
@@ -145,20 +132,5 @@ if (process.env.NODE_ENV === 'development') {
     });
 }
 
-// Export the serverless function for Netlify
-exports.handler = serverless(app);
-error: sendError?.message || sendError
-            });
-        }
-    } catch (error) {
-    console.error('Error processing enquiry:', error);
-    res.status(500).json({
-        success: false,
-        message: 'Failed to process enquiry. Please try again.',
-        error: error?.message || error
-    });
-}
-});
-
-// Export the serverless handler
+// Export for Netlify
 module.exports.handler = serverless(app);
