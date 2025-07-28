@@ -1,15 +1,28 @@
 [build]
 command = "npm run build"
 publish = "dist"
+functions = "netlify/functions"
 
+# Environment variables for build time
+[build.environment]
+VITE_API_URL = "https://your-api-server.onrender.com"  # This should be your actual API server URL when deployed
+
+# Development settings only - these don't affect production
 [dev]
 command = "npm run dev"
 targetPort = 5173
 port = 8888
 autoLaunch = true
 
+# Handle API requests through Netlify Functions
 [[redirects]]
 from = "/api/*"
-to = "http://localhost:3001/api/:splat"
+to = "/.netlify/functions/api/:splat"
 status = 200
 force = true
+
+# Handle client-side routing
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200

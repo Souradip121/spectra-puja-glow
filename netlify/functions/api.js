@@ -1,58 +1,36 @@
 const express = require('express');
+const serverless = require('serverless-http');
 const cors = require('cors');
 const { Resend } = require('resend');
-require('dotenv').config();
 
+// Initialize Express
 const app = express();
-const PORT = process.env.PORT || 3001;
 
-// CORS configuration - make sure to add your Netlify domain
-const allowedOrigins = [
-    'http://localhost:3000',
-    'http://localhost:5173',
-    'http://localhost:8888',
-    'https://spectrainfo.netlify.app'
-];
-
-// Improved CORS handling
-app.use(cors({
-    origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps, curl requests)
-        if (!origin) return callback(null, true);
-
-        if (allowedOrigins.indexOf(origin) === -1) {
-            console.log('CORS blocked origin:', origin);
-            return callback(null, false);
-        }
-        return callback(null, true);
-    },
-    credentials: true
-}));
+// Configure CORS
+app.use(cors());
 app.use(express.json());
 
-// Add health check endpoint for debugging
+// Resend configuration
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+const SENDER_EMAIL = process.env.RESEND_SENDER_EMAIL || 'onboarding@resend.dev';
+const resend = new Resend(RESEND_API_KEY);
+
+// Health check endpoint
 app.get('/api/health', (req, res) => {
     res.status(200).json({
         status: 'ok',
         env: {
-            hasApiKey: !!process.env.RESEND_API_KEY,
-            senderEmail: process.env.RESEND_SENDER_EMAIL || 'onboarding@resend.dev',
-            node_env: process.env.NODE_ENV,
-            version: '1.0.1'
+            hasApiKey: !!RESEND_API_KEY,
+            senderEmail: SENDER_EMAIL
         }
     });
 });
 
-// Resend configuration
-const resend = new Resend(process.env.RESEND_API_KEY);
-const SENDER_EMAIL = process.env.RESEND_SENDER_EMAIL || 'onboarding@resend.dev';
-
-// Endpoint to handle form submissions
+// Enquiry submission endpoint
 app.post('/api/submit-enquiry', async (req, res) => {
     console.log('Received enquiry submission:', JSON.stringify(req.body, null, 2));
 
-    // Verify API key is available
-    if (!process.env.RESEND_API_KEY) {
+    if (!RESEND_API_KEY) {
         console.error('RESEND_API_KEY is missing');
         return res.status(500).json({ success: false, message: 'Server configuration error: Email API key missing.' });
     }
@@ -98,45 +76,41 @@ app.post('/api/submit-enquiry', async (req, res) => {
 
         // Email content
         const emailContent = `
-            <h2>New Durga Puja Tour Enquiry</h2>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Phone:</strong> ${phone}</p>
-            <p><strong>Interested Tour:</strong> ${interestedTour}</p>
-            ${travelPackage ? `<p><strong>Travel Package:</strong> ${travelPackage}</p>` : ''}
-            ${formattedDate ? `<p><strong>Travel Date:</strong> ${formattedDate}</p>` : ''}
-            <p><strong>Number of People:</strong> ${numberOfPeople}</p>
-            ${message ? `<p><strong>Message:</strong> ${message}</p>` : ''}
-            <hr>
-            <p><em>Submitted on: ${new Date().toLocaleString()}</em></p>
-        `;
+      <h2>New Durga Puja Tour Enquiry</h2>
+      <p><strong>Name:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Phone:</strong> ${phone}</p>
+      <p><strong>Interested Tour:</strong> ${interestedTour}</p>
+      ${travelPackage ? `<p><strong>Travel Package:</strong> ${travelPackage}</p>` : ''}
+      ${formattedDate ? `<p><strong>Travel Date:</strong> ${formattedDate}</p>` : ''}
+      <p><strong>Number of People:</strong> ${numberOfPeople}</p>
+      ${message ? `<p><strong>Message:</strong> ${message}</p>` : ''}
+      <hr>
+      <p><em>Submitted on: ${new Date().toLocaleString()}</em></p>
+    `;
 
-        console.log('Sending email with content:', emailContent);
-
-        // Define email requests outside try/catch block
+        // Define email requests
         const adminEmailRequest = {
             from: SENDER_EMAIL,
-            to: ['mail@spectrainfo.in'], // Ensure this is an array
+            to: ['mail@spectrainfo.in'],
             subject: `New Durga Puja Tour Enquiry from ${name}`,
             html: emailContent,
         };
 
         const userEmailRequest = {
             from: SENDER_EMAIL,
-            to: [email], // Ensure this is an array
+            to: [email],
             subject: `Copy of your Durga Puja Tour Enquiry`,
             html: `
-                <p>Dear ${name},</p>
-                <p>Thank you for your enquiry. Here is a copy of your submission:</p>
-                ${emailContent}
-                <p>We will get back to you soon!</p>
-            `,
+          <p>Dear ${name},</p>
+          <p>Thank you for your enquiry. Here is a copy of your submission:</p>
+          ${emailContent}
+          <p>We will get back to you soon!</p>
+      `,
         };
 
-        // Attempt to send emails
         try {
-            // Send to admin first
-            console.log('Sending admin email:', JSON.stringify(adminEmailRequest, null, 2));
+            // Send admin email
             const { data: adminResponse, error: adminError } = await resend.emails.send(adminEmailRequest);
 
             if (adminError) {
@@ -148,15 +122,11 @@ app.post('/api/submit-enquiry', async (req, res) => {
                 });
             }
 
-            console.log('Admin email sent successfully:', adminResponse);
-
-            // Then send to user
-            console.log('Sending user email:', JSON.stringify(userEmailRequest, null, 2));
+            // Send user confirmation email
             const { data: userResponse, error: userError } = await resend.emails.send(userEmailRequest);
 
             if (userError) {
                 console.error('Resend API error (user):', userError);
-                // Still return success since admin email was sent
                 return res.status(200).json({
                     success: true,
                     message: 'Enquiry submitted, but confirmation email failed.',
@@ -165,9 +135,6 @@ app.post('/api/submit-enquiry', async (req, res) => {
                 });
             }
 
-            console.log('User email sent successfully:', userResponse);
-
-            // Both emails sent successfully
             return res.status(200).json({
                 success: true,
                 message: 'Enquiry submitted successfully!',
@@ -176,29 +143,22 @@ app.post('/api/submit-enquiry', async (req, res) => {
             });
 
         } catch (sendError) {
-            console.error('Resend API error (catch):', sendError);
+            console.error('Resend API error:', sendError);
             return res.status(502).json({
                 success: false,
                 message: 'Email service error.',
-                error: sendError?.message || sendError,
-                stack: process.env.NODE_ENV === 'development' ? sendError?.stack : undefined
+                error: sendError?.message || sendError
             });
         }
     } catch (error) {
-        console.error('Error processing enquiry (outer catch):', error);
-        if (error && error.stack) {
-            console.error('Error stack:', error.stack);
-        }
+        console.error('Error processing enquiry:', error);
         res.status(500).json({
             success: false,
             message: 'Failed to process enquiry. Please try again.',
-            error: error?.message || error,
-            stack: process.env.NODE_ENV === 'development' ? error?.stack : undefined
+            error: error?.message || error
         });
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
-
+// Export the serverless handler
+module.exports.handler = serverless(app);

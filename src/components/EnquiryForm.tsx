@@ -98,52 +98,79 @@ const EnquiryForm = () => {
     setErrorMessage("");
 
     try {
-      // Use the absolute URL of your backend server
-      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3001";
+      // When deployed on Netlify, use the relative path to the Netlify Function
+      // For local development, use the environment variable or localhost
+      const apiUrl = import.meta.env.DEV
+        ? import.meta.env.VITE_API_URL || "http://localhost:8888" // Development
+        : ""; // Production (empty means use relative URL)
 
-      console.log(`Submitting form to: ${apiUrl}/api/submit-enquiry`);
+      const apiEndpoint = `${apiUrl}/api/submit-enquiry`;
 
-      const response = await fetch(`${apiUrl}/api/submit-enquiry`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-        // Add timeout to prevent long wait on connection issues
-        signal: AbortSignal.timeout(30000), // 30 seconds timeout
-      });
+      console.log(`Submitting form to: ${apiEndpoint}`);
+      setErrorMessage("Submitting your enquiry...");
 
-      const result = await response.json();
-      console.log("API response:", result);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 seconds timeout
 
-      if (response.ok) {
-        setShowModal(true);
-        // Reset form after a short delay
-        setTimeout(() => {
-          setDateRange(undefined);
-          setValue("name", "");
-          setValue("email", "");
-          setValue("phone", "");
-          setValue("interestedTour", "");
-          setValue("travelPackage", "");
-          setValue("numberOfPeople", 1);
-          setValue("message", "");
-        }, 2000);
-      } else {
-        console.error("API error response:", result);
-        setErrorMessage(result.message || "Failed to submit enquiry");
-        throw new Error(result.message || "Failed to submit enquiry");
+      try {
+        const response = await fetch(apiEndpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        let result;
+        try {
+          result = await response.json();
+          console.log("API response:", result);
+        } catch (parseError) {
+          console.error("Failed to parse response:", parseError);
+          result = { message: "Invalid server response" };
+        }
+
+        if (response.ok) {
+          setErrorMessage("");
+          setShowModal(true);
+          // Reset form after a short delay
+          setTimeout(() => {
+            setDateRange(undefined);
+            setValue("name", "");
+            setValue("email", "");
+            setValue("phone", "");
+            setValue("interestedTour", "");
+            setValue("travelPackage", "");
+            setValue("numberOfPeople", 1);
+            setValue("message", "");
+          }, 2000);
+        } else {
+          console.error("API error response:", result);
+          setErrorMessage(
+            result?.message ||
+              `Error ${response.status}: ${response.statusText}`
+          );
+          throw new Error(result?.message || "Server returned an error");
+        }
+      } catch (fetchError) {
+        clearTimeout(timeoutId);
+        throw fetchError;
       }
     } catch (error) {
       console.error("Error submitting enquiry:", error);
 
-      // Handle connection errors specifically
-      if (
+      // Handle specific error cases
+      if (error.name === "AbortError") {
+        setErrorMessage("Request timed out. Please try again later.");
+      } else if (
         error instanceof TypeError &&
         error.message.includes("Failed to fetch")
       ) {
         setErrorMessage(
-          "Could not connect to the server. Please check your internet connection or try again later."
+          "Could not connect to our server. Please try again later or contact us directly at mail@spectrainfo.in"
         );
       } else {
         setErrorMessage(
@@ -155,7 +182,6 @@ const EnquiryForm = () => {
       toast({
         title: "Submission Failed",
         description:
-          errorMessage ||
           "Please try again or contact us directly at mail@spectrainfo.in",
         variant: "destructive",
       });
