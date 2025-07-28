@@ -36,10 +36,13 @@ const SENDER_EMAIL = process.env.RESEND_SENDER_EMAIL || 'onboarding@resend.dev';
 // Endpoint to handle form submissions
 app.post('/api/submit-enquiry', async (req, res) => {
     console.log('Received enquiry submission:', JSON.stringify(req.body, null, 2));
+
+    // Verify API key is available
     if (!process.env.RESEND_API_KEY) {
         console.error('RESEND_API_KEY is missing');
         return res.status(500).json({ success: false, message: 'Server configuration error: Email API key missing.' });
     }
+
     try {
         const { name, email, phone, interestedTour, travelPackage, travelDate, numberOfPeople, message } = req.body;
 
@@ -96,19 +99,31 @@ app.post('/api/submit-enquiry', async (req, res) => {
 
         console.log('Sending email with content:', emailContent);
 
-        // Send email to admin
+        // Define email requests outside try/catch block
+        const adminEmailRequest = {
+            from: SENDER_EMAIL,
+            to: ['mail@spectrainfo.in'], // Ensure this is an array
+            subject: `New Durga Puja Tour Enquiry from ${name}`,
+            html: emailContent,
+        };
+
+        const userEmailRequest = {
+            from: SENDER_EMAIL,
+            to: [email], // Ensure this is an array
+            subject: `Copy of your Durga Puja Tour Enquiry`,
+            html: `
+                <p>Dear ${name},</p>
+                <p>Thank you for your enquiry. Here is a copy of your submission:</p>
+                ${emailContent}
+                <p>We will get back to you soon!</p>
+            `,
+        };
+
+        // Attempt to send emails
         try {
-            const adminEmailRequest = {
-                from: SENDER_EMAIL,
-                to: 'mail@spectrainfo.in',
-                subject: `New Durga Puja Tour Enquiry from ${name}`,
-                html: emailContent,
-            };
-            console.log('Admin email request:', JSON.stringify(adminEmailRequest, null, 2));
-
+            // Send to admin first
+            console.log('Sending admin email:', JSON.stringify(adminEmailRequest, null, 2));
             const { data: adminResponse, error: adminError } = await resend.emails.send(adminEmailRequest);
-
-            console.log('Resend API response (admin):', adminResponse, adminError);
 
             if (adminError) {
                 console.error('Resend API error (admin):', adminError);
@@ -119,52 +134,50 @@ app.post('/api/submit-enquiry', async (req, res) => {
                 });
             }
 
-            // Send confirmation email to user
-            const userEmailRequest = {
-                from: SENDER_EMAIL,
-                to: email,
-                subject: `Copy of your Durga Puja Tour Enquiry`,
-                html: `
-                    <p>Dear ${name},</p>
-                    <p>Thank you for your enquiry. Here is a copy of your submission:</p>
-                    ${emailContent}
-                    <p>We will get back to you soon!</p>
-                `,
-            };
-            console.log('User email request:', JSON.stringify(userEmailRequest, null, 2));
+            console.log('Admin email sent successfully:', adminResponse);
 
+            // Then send to user
+            console.log('Sending user email:', JSON.stringify(userEmailRequest, null, 2));
             const { data: userResponse, error: userError } = await resend.emails.send(userEmailRequest);
-
-            console.log('Resend API response (user):', userResponse, userError);
 
             if (userError) {
                 console.error('Resend API error (user):', userError);
-                return res.status(502).json({
-                    success: false,
-                    message: 'Email service error (user).',
-                    error: userError
+                // Still return success since admin email was sent
+                return res.status(200).json({
+                    success: true,
+                    message: 'Enquiry submitted, but confirmation email failed.',
+                    adminEmailId: adminResponse?.id,
+                    userEmailError: userError
                 });
             }
+
+            console.log('User email sent successfully:', userResponse);
+
+            // Both emails sent successfully
+            return res.status(200).json({
+                success: true,
+                message: 'Enquiry submitted successfully!',
+                adminEmailId: adminResponse?.id,
+                userEmailId: userResponse?.id
+            });
+
         } catch (sendError) {
             console.error('Resend API error (catch):', sendError);
             return res.status(502).json({
                 success: false,
                 message: 'Email service error.',
                 error: sendError?.message || sendError,
-                stack: sendError?.stack
+                stack: process.env.NODE_ENV === 'development' ? sendError?.stack : undefined
             });
         }
-
-        console.log('Email sent successfully.');
-        res.status(200).json({ success: true, message: 'Enquiry submitted successfully!' });
     } catch (error) {
-        console.error('Error sending email (outer catch):', error);
+        console.error('Error processing enquiry (outer catch):', error);
         if (error && error.stack) {
             console.error('Error stack:', error.stack);
         }
         res.status(500).json({
             success: false,
-            message: 'Failed to submit enquiry. Please try again.',
+            message: 'Failed to process enquiry. Please try again.',
             error: error?.message || error,
             stack: process.env.NODE_ENV === 'development' ? error?.stack : undefined
         });

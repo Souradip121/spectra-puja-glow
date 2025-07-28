@@ -62,6 +62,8 @@ const EnquiryForm = () => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const {
     register,
@@ -92,18 +94,27 @@ const EnquiryForm = () => {
   }, [showModal]);
 
   const onSubmit = async (data: FormData) => {
+    setSubmitting(true);
+    setErrorMessage("");
+
     try {
       // Use the absolute URL of your backend server
       const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3001";
+
+      console.log(`Submitting form to: ${apiUrl}/api/submit-enquiry`);
+
       const response = await fetch(`${apiUrl}/api/submit-enquiry`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
+        // Add timeout to prevent long wait on connection issues
+        signal: AbortSignal.timeout(30000), // 30 seconds timeout
       });
 
       const result = await response.json();
+      console.log("API response:", result);
 
       if (response.ok) {
         setShowModal(true);
@@ -119,17 +130,37 @@ const EnquiryForm = () => {
           setValue("message", "");
         }, 2000);
       } else {
-        console.error("API response error:", result);
+        console.error("API error response:", result);
+        setErrorMessage(result.message || "Failed to submit enquiry");
         throw new Error(result.message || "Failed to submit enquiry");
       }
     } catch (error) {
       console.error("Error submitting enquiry:", error);
+
+      // Handle connection errors specifically
+      if (
+        error instanceof TypeError &&
+        error.message.includes("Failed to fetch")
+      ) {
+        setErrorMessage(
+          "Could not connect to the server. Please check your internet connection or try again later."
+        );
+      } else {
+        setErrorMessage(
+          (error as Error)?.message ||
+            "An unexpected error occurred. Please try again later."
+        );
+      }
+
       toast({
         title: "Submission Failed",
         description:
+          errorMessage ||
           "Please try again or contact us directly at mail@spectrainfo.in",
         variant: "destructive",
       });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -531,9 +562,16 @@ const EnquiryForm = () => {
                     onMouseLeave={(e) =>
                       (e.target.style.backgroundColor = "#fdd835")
                     }
+                    disabled={submitting}
                   >
-                    Submit Enquiry
+                    {submitting ? "Submitting..." : "Submit Enquiry"}
                   </Button>
+
+                  {errorMessage && (
+                    <p className="text-destructive text-center mt-2">
+                      {errorMessage}
+                    </p>
+                  )}
                 </form>
               </CardContent>
             </Card>
