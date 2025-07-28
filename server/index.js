@@ -17,6 +17,18 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// Add health check endpoint for debugging
+app.get('/api/health', (req, res) => {
+    res.status(200).json({
+        status: 'ok',
+        env: {
+            hasApiKey: !!process.env.RESEND_API_KEY,
+            senderEmail: process.env.RESEND_SENDER_EMAIL || 'onboarding@resend.dev',
+            node_env: process.env.NODE_ENV
+        }
+    });
+});
+
 // Resend configuration
 const resend = new Resend(process.env.RESEND_API_KEY);
 const SENDER_EMAIL = process.env.RESEND_SENDER_EMAIL || 'onboarding@resend.dev';
@@ -84,15 +96,18 @@ app.post('/api/submit-enquiry', async (req, res) => {
 
         console.log('Sending email with content:', emailContent);
 
-        // Send email to admin and user
-        let adminResponse, adminError, userResponse, userError;
+        // Send email to admin
         try {
-            ({ data: adminResponse, error: adminError } = await resend.emails.send({
+            const adminEmailRequest = {
                 from: SENDER_EMAIL,
                 to: 'mail@spectrainfo.in',
                 subject: `New Durga Puja Tour Enquiry from ${name}`,
                 html: emailContent,
-            }));
+            };
+            console.log('Admin email request:', JSON.stringify(adminEmailRequest, null, 2));
+
+            const { data: adminResponse, error: adminError } = await resend.emails.send(adminEmailRequest);
+
             console.log('Resend API response (admin):', adminResponse, adminError);
 
             if (adminError) {
@@ -104,7 +119,8 @@ app.post('/api/submit-enquiry', async (req, res) => {
                 });
             }
 
-            ({ data: userResponse, error: userError } = await resend.emails.send({
+            // Send confirmation email to user
+            const userEmailRequest = {
                 from: SENDER_EMAIL,
                 to: email,
                 subject: `Copy of your Durga Puja Tour Enquiry`,
@@ -114,7 +130,11 @@ app.post('/api/submit-enquiry', async (req, res) => {
                     ${emailContent}
                     <p>We will get back to you soon!</p>
                 `,
-            }));
+            };
+            console.log('User email request:', JSON.stringify(userEmailRequest, null, 2));
+
+            const { data: userResponse, error: userError } = await resend.emails.send(userEmailRequest);
+
             console.log('Resend API response (user):', userResponse, userError);
 
             if (userError) {
@@ -127,7 +147,12 @@ app.post('/api/submit-enquiry', async (req, res) => {
             }
         } catch (sendError) {
             console.error('Resend API error (catch):', sendError);
-            return res.status(502).json({ success: false, message: 'Email service error.', error: sendError?.message || sendError });
+            return res.status(502).json({
+                success: false,
+                message: 'Email service error.',
+                error: sendError?.message || sendError,
+                stack: sendError?.stack
+            });
         }
 
         console.log('Email sent successfully.');
@@ -137,7 +162,12 @@ app.post('/api/submit-enquiry', async (req, res) => {
         if (error && error.stack) {
             console.error('Error stack:', error.stack);
         }
-        res.status(500).json({ success: false, message: 'Failed to submit enquiry. Please try again.', error: error?.message || error });
+        res.status(500).json({
+            success: false,
+            message: 'Failed to submit enquiry. Please try again.',
+            error: error?.message || error,
+            stack: process.env.NODE_ENV === 'development' ? error?.stack : undefined
+        });
     }
 });
 

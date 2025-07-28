@@ -93,16 +93,17 @@ const EnquiryForm = () => {
 
   const onSubmit = async (data: FormData) => {
     try {
-      const response = await fetch(
-        "/api/submit-enquiry", // <-- use relative path
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      // Use the absolute URL of your backend server
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3001";
+      const response = await fetch(`${apiUrl}/api/submit-enquiry`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
 
       if (response.ok) {
         setShowModal(true);
@@ -118,7 +119,8 @@ const EnquiryForm = () => {
           setValue("message", "");
         }, 2000);
       } else {
-        throw new Error("Failed to submit enquiry");
+        console.error("API response error:", result);
+        throw new Error(result.message || "Failed to submit enquiry");
       }
     } catch (error) {
       console.error("Error submitting enquiry:", error);
