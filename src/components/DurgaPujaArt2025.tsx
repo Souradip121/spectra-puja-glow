@@ -112,9 +112,9 @@ const DurgaPujaArt2025 = () => {
     },
     {
       icon: Users,
-      title: "Dedicated massArt Attaché",
+      title: "Dedicated Attaché",
       description:
-        "Dedicated massArt attaché with every vehicle for seamless on-ground support",
+        "Dedicated attaché with every vehicle for seamless on-ground support",
     },
   ];
 
