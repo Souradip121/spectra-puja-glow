@@ -40,7 +40,7 @@ const formSchema = z
     numberOfPeople: z
       .number({ invalid_type_error: "Number of people is required" })
       .min(1, "Minimum 1 person required")
-      .max(50, "Maximum 50 people allowed"),
+      .max(100, "Maximum 100 people allowed"),
     message: z.string().optional(),
   })
   .refine(
@@ -493,7 +493,7 @@ const EnquiryForm = () => {
                       id="numberOfPeople"
                       type="number"
                       min={1}
-                      max={50}
+                      max={100}
                       {...register("numberOfPeople", { valueAsNumber: true })}
                       className={
                         errors.numberOfPeople ? "border-destructive" : ""
