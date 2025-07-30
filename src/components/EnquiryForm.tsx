@@ -631,4 +631,3 @@ const EnquiryForm = () => {
 */
 
 export default EnquiryForm;
-export default EnquiryForm;
