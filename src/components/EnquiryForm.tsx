@@ -33,10 +33,12 @@ const formSchema = z
     phone: z.string().min(10, "Phone number is required"),
     interestedTour: z.string().min(1, "Please select a tour"),
     travelPackage: z.string().optional(),
-    travelDate: z.object({
-      from: z.date(),
-      to: z.date().optional(),
-    }),
+    travelDate: z
+      .object({
+        from: z.date().optional(),
+        to: z.date().optional(),
+      })
+      .optional(),
     numberOfPeople: z
       .number({ invalid_type_error: "Number of people is required" })
       .min(1, "Minimum 1 person required")
@@ -54,6 +56,19 @@ const formSchema = z
       message: "Please select a travel package",
       path: ["travelPackage"],
     }
+  )
+  .refine(
+    (data) => {
+      // Only require travel date if not "other" tour
+      if (data.interestedTour !== "other" && !data.travelDate?.from) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message: "Travel date is required",
+      path: ["travelDate"],
+    }
   );
 
 type FormData = z.infer<typeof formSchema>;
@@ -62,6 +77,7 @@ const EnquiryForm = () => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     register,
@@ -92,7 +108,17 @@ const EnquiryForm = () => {
   }, [showModal]);
 
   const onSubmit = async (data: FormData) => {
+    setIsSubmitting(true); // Show loading modal immediately
+    
     try {
+      // For "other" tours, set a default date if none provided
+      const submissionData = {
+        ...data,
+        travelDate: data.interestedTour === "other" && !data.travelDate?.from 
+          ? undefined 
+          : data.travelDate
+      };
+
       // Use relative URL for API endpoint that works both in dev and production
       const apiUrl = "/api/submit-enquiry";
       const response = await fetch(apiUrl, {
@@ -100,11 +126,12 @@ const EnquiryForm = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(submissionData),
       });
 
       if (response.ok) {
-        setShowModal(true);
+        setIsSubmitting(false); // Hide loading modal
+        setShowModal(true); // Show success modal
         // Reset form after a short delay
         setTimeout(() => {
           setDateRange(undefined);
@@ -121,6 +148,7 @@ const EnquiryForm = () => {
       }
     } catch (error) {
       console.error("Error submitting enquiry:", error);
+      setIsSubmitting(false); // Hide loading modal on error
       toast({
         title: "Submission Failed",
         description:
@@ -238,18 +266,45 @@ const EnquiryForm = () => {
 
   return (
     <>
-      {/* Modal for submission success */}
+      {/* Loading modal for submission in progress */}
+      {isSubmitting && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40"
+          style={{ backdropFilter: "blur(4px)" }}
+        >
+          <div className="bg-white rounded-lg shadow-lg p-8 max-w-sm mx-auto text-center">
+            <div className="flex justify-center mb-4">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-500"></div>
+            </div>
+            <h2 className="text-2xl font-bold mb-2 text-gray-700">
+              Sending Enquiry...
+            </h2>
+            <p className="text-gray-600">
+              Please wait while we process your request.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Success modal for submission complete */}
       {showModal && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40"
           style={{ backdropFilter: "blur(4px)" }}
         >
           <div className="bg-white rounded-lg shadow-lg p-8 max-w-sm mx-auto text-center">
+            <div className="flex justify-center mb-4">
+              <div className="rounded-full h-12 w-12 bg-green-100 flex items-center justify-center">
+                <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+              </div>
+            </div>
             <h2 className="text-2xl font-bold mb-2 text-green-700">
-              Enquiry Submitted!
+              Enquiry Sent Successfully!
             </h2>
-            <p className="mb-6">
-              Your enquiry has been successfully submitted.
+            <p className="mb-6 text-gray-600">
+              Your enquiry has been successfully submitted. We will get back to you soon!
             </p>
             <Button
               onClick={() => setShowModal(false)}
@@ -261,6 +316,7 @@ const EnquiryForm = () => {
           </div>
         </div>
       )}
+      
       <section id="enquiry" className="py-20 bg-durga-cream/20">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto">
@@ -332,6 +388,10 @@ const EnquiryForm = () => {
                           const range = { from: fixedDate, to: undefined };
                           setDateRange(range);
                           setValue("travelDate", range);
+                        } else if (value === "other") {
+                          // Clear date for "other" tours since it's not required
+                          setDateRange(undefined);
+                          setValue("travelDate", undefined);
                         } else {
                           // Reset date for other tours
                           setDateRange(undefined);
@@ -528,8 +588,9 @@ const EnquiryForm = () => {
                     onMouseLeave={(e) =>
                       (e.target.style.backgroundColor = "#fdd835")
                     }
+                    disabled={isSubmitting}
                   >
-                    Submit Enquiry
+                    {isSubmitting ? "Sending..." : "Submit Enquiry"}
                   </Button>
                 </form>
               </CardContent>

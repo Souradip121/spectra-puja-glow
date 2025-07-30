@@ -24,16 +24,16 @@ app.post('/api/submit-enquiry', async (req, res) => {
     try {
         const { name, email, phone, interestedTour, travelPackage, travelDate, numberOfPeople, message } = req.body;
 
-        // Validate required fields
+        // Validate required fields - make travelDate optional for "other" tours
         if (
             !name ||
             !email ||
             !phone ||
             !interestedTour ||
-            !travelDate?.from ||
+            (interestedTour !== "other" && !travelDate?.from) ||
             typeof numberOfPeople !== "number" ||
             numberOfPeople < 1 ||
-            numberOfPeople > 50
+            numberOfPeople > 100
         ) {
             console.error('Missing or invalid required fields:', { name, email, phone, interestedTour, travelDate, numberOfPeople });
             return res.status(400).json({ success: false, message: 'Missing or invalid required fields.' });

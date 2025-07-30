@@ -11,7 +11,7 @@ export default defineConfig({
     },
   },
   server: {
-    port: 8080,
+    port: 5173,
     proxy: {
       // Proxy API requests during development
       "/api": {
@@ -22,7 +22,3 @@ export default defineConfig({
     },
   },
 });
-      "@": path.resolve(__dirname, "./src"),
-    },
-  },
-}));

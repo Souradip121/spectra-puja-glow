@@ -56,7 +56,8 @@ app.post('/submit-enquiry', async (req, res) => {
             validationErrors.push('Interested tour is required');
         }
         
-        if (!travelDate || typeof travelDate !== 'object' || !travelDate.from) {
+        // Only require travel date if not "other" tour
+        if (interestedTour !== "other" && (!travelDate || typeof travelDate !== 'object' || !travelDate.from)) {
             validationErrors.push('Travel date is required');
         }
         
