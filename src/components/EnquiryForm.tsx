@@ -122,8 +122,8 @@ const EnquiryForm = () => {
 
       console.log("Submitting data:", submissionData);
 
-      // Use relative URL for API endpoint that works both in dev and production
-      const apiUrl = "/api/submit-enquiry";
+      // Use direct Netlify function endpoint
+      const apiUrl = "/.netlify/functions/submit-enquiry";
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
@@ -133,7 +133,6 @@ const EnquiryForm = () => {
       });
 
       console.log("Response status:", response.status);
-      console.log("Response headers:", response.headers);
 
       if (response.ok) {
         const result = await response.json();
@@ -631,4 +630,5 @@ const EnquiryForm = () => {
 }
 */
 
+export default EnquiryForm;
 export default EnquiryForm;

@@ -3,11 +3,15 @@
   publish = "dist"
   functions = "netlify/functions"
 
+[functions]
+  directory = "netlify/functions"
+
 # Redirect API requests to the serverless function
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"
   status = 200
+  force = true
 
 # Handle client-side routing for SPA
 [[redirects]]

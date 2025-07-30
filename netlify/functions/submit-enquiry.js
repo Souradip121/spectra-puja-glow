@@ -1,74 +1,50 @@
-const express = require('express');
-const serverless = require('serverless-http');
-const cors = require('cors');
 const { Resend } = require('resend');
-require('dotenv').config();
 
-const app = express();
-
-// Middleware
-app.use(cors());
-app.use(express.json());
-
-// Resend configuration
+// Initialize Resend
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// Health check endpoint
-app.get('/.netlify/functions/api/health', (req, res) => {
-    res.status(200).json({
-        status: 'ok',
-        timestamp: new Date().toISOString(),
-        env: {
-            hasApiKey: !!process.env.RESEND_API_KEY,
-            senderEmail: 'onboarding@resend.dev'
-        }
-    });
-});
+exports.handler = async (event, context) => {
+    // Enable CORS
+    const headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    };
 
-// Root endpoint for testing
-app.get('/.netlify/functions/api', (req, res) => {
-    res.status(200).json({
-        message: 'Spectra Puja API is running',
-        endpoints: ['/.netlify/functions/api/health', '/.netlify/functions/api/submit-enquiry']
-    });
-});
+    // Handle preflight OPTIONS request
+    if (event.httpMethod === 'OPTIONS') {
+        return {
+            statusCode: 200,
+            headers,
+            body: '',
+        };
+    }
 
-// Also handle routes without the full path for local development
-app.get('/health', (req, res) => {
-    res.status(200).json({
-        status: 'ok',
-        timestamp: new Date().toISOString(),
-        env: {
-            hasApiKey: !!process.env.RESEND_API_KEY,
-            senderEmail: 'onboarding@resend.dev'
-        }
-    });
-});
-
-app.get('/', (req, res) => {
-    res.status(200).json({
-        message: 'Spectra Puja API is running',
-        endpoints: ['/health', '/submit-enquiry']
-    });
-});
-
-// Enquiry submission endpoint - handle both full path and short path
-app.post('/.netlify/functions/api/submit-enquiry', handleSubmitEnquiry);
-app.post('/submit-enquiry', handleSubmitEnquiry);
-
-async function handleSubmitEnquiry(req, res) {
-    console.log('Received enquiry submission:', JSON.stringify(req.body, null, 2));
-
-    // Check API key presence
-    if (!process.env.RESEND_API_KEY) {
-        console.error('RESEND_API_KEY is missing');
-        return res.status(500).json({ success: false, message: 'Server configuration error: Email API key missing.' });
+    // Only allow POST requests
+    if (event.httpMethod !== 'POST') {
+        return {
+            statusCode: 405,
+            headers,
+            body: JSON.stringify({ error: 'Method not allowed' }),
+        };
     }
 
     try {
-        const { name, email, phone, interestedTour, travelPackage, travelDate, numberOfPeople, message } = req.body;
+        console.log('Received enquiry submission:', event.body);
 
-        // Enhanced validation with detailed logging
+        // Check API key presence
+        if (!process.env.RESEND_API_KEY) {
+            console.error('RESEND_API_KEY is missing');
+            return {
+                statusCode: 500,
+                headers,
+                body: JSON.stringify({ success: false, message: 'Server configuration error: Email API key missing.' })
+            };
+        }
+
+        const { name, email, phone, interestedTour, travelPackage, travelDate, numberOfPeople, message } = JSON.parse(event.body);
+
+        // Enhanced validation
         const validationErrors = [];
 
         if (!name || typeof name !== 'string' || name.trim().length === 0) {
@@ -103,11 +79,15 @@ async function handleSubmitEnquiry(req, res) {
 
         if (validationErrors.length > 0) {
             console.error('Validation errors:', validationErrors);
-            return res.status(400).json({
-                success: false,
-                message: 'Validation failed: ' + validationErrors.join(', '),
-                errors: validationErrors
-            });
+            return {
+                statusCode: 400,
+                headers,
+                body: JSON.stringify({
+                    success: false,
+                    message: 'Validation failed: ' + validationErrors.join(', '),
+                    errors: validationErrors
+                })
+            };
         }
 
         // Format the travel date
@@ -177,32 +157,33 @@ async function handleSubmitEnquiry(req, res) {
             });
             console.log('Resend API response (user):', userResult);
 
-            res.status(200).json({ success: true, message: 'Enquiry submitted successfully!' });
+            return {
+                statusCode: 200,
+                headers,
+                body: JSON.stringify({ success: true, message: 'Enquiry submitted successfully!' })
+            };
         } catch (emailError) {
             console.error('Email sending error:', emailError);
-            res.status(502).json({
-                success: false,
-                message: 'Failed to send email. Please try again.',
-                error: emailError?.message || 'Email service error'
-            });
+            return {
+                statusCode: 502,
+                headers,
+                body: JSON.stringify({
+                    success: false,
+                    message: 'Failed to send email. Please try again.',
+                    error: emailError?.message || 'Email service error'
+                })
+            };
         }
     } catch (error) {
         console.error('Error processing enquiry:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Failed to process enquiry. Please try again.',
-            error: error?.message || error
-        });
+        return {
+            statusCode: 500,
+            headers,
+            body: JSON.stringify({
+                success: false,
+                message: 'Failed to process enquiry. Please try again.',
+                error: error?.message || error
+            })
+        };
     }
-}
-
-// For local development
-if (process.env.NODE_ENV === 'development') {
-    const PORT = process.env.PORT || 3001;
-    app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
-    });
-}
-
-// Export for Netlify
-module.exports.handler = serverless(app);
+};
