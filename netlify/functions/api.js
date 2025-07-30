@@ -17,10 +17,19 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 app.get('/health', (req, res) => {
     res.status(200).json({
         status: 'ok',
+        timestamp: new Date().toISOString(),
         env: {
             hasApiKey: !!process.env.RESEND_API_KEY,
             senderEmail: 'onboarding@resend.dev'
         }
+    });
+});
+
+// Root endpoint for testing
+app.get('/', (req, res) => {
+    res.status(200).json({
+        message: 'Spectra Puja API is running',
+        endpoints: ['/health', '/submit-enquiry']
     });
 });
 
@@ -39,28 +48,28 @@ app.post('/submit-enquiry', async (req, res) => {
 
         // Enhanced validation with detailed logging
         const validationErrors = [];
-        
+
         if (!name || typeof name !== 'string' || name.trim().length === 0) {
             validationErrors.push('Name is required');
         }
-        
+
         if (!email || typeof email !== 'string' || !email.includes('@')) {
             validationErrors.push('Valid email is required');
         }
-        
+
         if (!phone || typeof phone !== 'string' || phone.trim().length < 10) {
             validationErrors.push('Valid phone number is required');
         }
-        
+
         if (!interestedTour || typeof interestedTour !== 'string') {
             validationErrors.push('Interested tour is required');
         }
-        
+
         // Only require travel date if not "other" tour
         if (interestedTour !== "other" && (!travelDate || typeof travelDate !== 'object' || !travelDate.from)) {
             validationErrors.push('Travel date is required');
         }
-        
+
         if (typeof numberOfPeople !== "number" || numberOfPeople < 1 || numberOfPeople > 100) {
             validationErrors.push('Number of people must be between 1 and 100');
         }
@@ -72,8 +81,8 @@ app.post('/submit-enquiry', async (req, res) => {
 
         if (validationErrors.length > 0) {
             console.error('Validation errors:', validationErrors);
-            return res.status(400).json({ 
-                success: false, 
+            return res.status(400).json({
+                success: false,
                 message: 'Validation failed: ' + validationErrors.join(', '),
                 errors: validationErrors
             });

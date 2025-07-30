@@ -109,15 +109,18 @@ const EnquiryForm = () => {
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true); // Show loading modal immediately
-    
+
     try {
       // For "other" tours, set a default date if none provided
       const submissionData = {
         ...data,
-        travelDate: data.interestedTour === "other" && !data.travelDate?.from 
-          ? undefined 
-          : data.travelDate
+        travelDate:
+          data.interestedTour === "other" && !data.travelDate?.from
+            ? undefined
+            : data.travelDate,
       };
+
+      console.log("Submitting data:", submissionData);
 
       // Use relative URL for API endpoint that works both in dev and production
       const apiUrl = "/api/submit-enquiry";
@@ -129,7 +132,12 @@ const EnquiryForm = () => {
         body: JSON.stringify(submissionData),
       });
 
+      console.log("Response status:", response.status);
+      console.log("Response headers:", response.headers);
+
       if (response.ok) {
+        const result = await response.json();
+        console.log("Success response:", result);
         setIsSubmitting(false); // Hide loading modal
         setShowModal(true); // Show success modal
         // Reset form after a short delay
@@ -144,15 +152,18 @@ const EnquiryForm = () => {
           setValue("message", "");
         }, 2000);
       } else {
-        throw new Error("Failed to submit enquiry");
+        const errorData = await response.text();
+        console.error("Error response:", errorData);
+        throw new Error(
+          `Server responded with ${response.status}: ${errorData}`
+        );
       }
     } catch (error) {
       console.error("Error submitting enquiry:", error);
       setIsSubmitting(false); // Hide loading modal on error
       toast({
         title: "Submission Failed",
-        description:
-          "Please try again or contact us directly at mail@spectrainfo.in",
+        description: `Please try again or contact us directly at mail@spectrainfo.in. Error: ${error.message}`,
         variant: "destructive",
       });
     }
@@ -295,8 +306,18 @@ const EnquiryForm = () => {
           <div className="bg-white rounded-lg shadow-lg p-8 max-w-sm mx-auto text-center">
             <div className="flex justify-center mb-4">
               <div className="rounded-full h-12 w-12 bg-green-100 flex items-center justify-center">
-                <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                <svg
+                  className="h-6 w-6 text-green-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M5 13l4 4L19 7"
+                  ></path>
                 </svg>
               </div>
             </div>
@@ -304,7 +325,8 @@ const EnquiryForm = () => {
               Enquiry Sent Successfully!
             </h2>
             <p className="mb-6 text-gray-600">
-              Your enquiry has been successfully submitted. We will get back to you soon!
+              Your enquiry has been successfully submitted. We will get back to
+              you soon!
             </p>
             <Button
               onClick={() => setShowModal(false)}
@@ -316,7 +338,7 @@ const EnquiryForm = () => {
           </div>
         </div>
       )}
-      
+
       <section id="enquiry" className="py-20 bg-durga-cream/20">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto">

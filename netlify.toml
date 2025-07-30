@@ -9,19 +9,8 @@
   to = "/.netlify/functions/api/:splat"
   status = 200
 
-# Redirect all other routes to the index.html for SPA
+# Handle client-side routing for SPA
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-
-# Handle client-side routing
-[[redirects]]
-from = "/*"
-to = "/index.html"
-status = 200
-[[redirects]]
-from = "/*"
-to = "/index.html"
-status = 200
