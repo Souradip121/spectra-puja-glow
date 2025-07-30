@@ -14,7 +14,7 @@ app.use(express.json());
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Health check endpoint
-app.get('/api/health', (req, res) => {
+app.get('/health', (req, res) => {
     res.status(200).json({
         status: 'ok',
         env: {
@@ -25,7 +25,7 @@ app.get('/api/health', (req, res) => {
 });
 
 // Enquiry submission endpoint
-app.post('/api/submit-enquiry', async (req, res) => {
+app.post('/submit-enquiry', async (req, res) => {
     console.log('Received enquiry submission:', JSON.stringify(req.body, null, 2));
 
     // Check API key presence
@@ -37,39 +37,70 @@ app.post('/api/submit-enquiry', async (req, res) => {
     try {
         const { name, email, phone, interestedTour, travelPackage, travelDate, numberOfPeople, message } = req.body;
 
-        // Validate required fields
-        if (
-            !name ||
-            !email ||
-            !phone ||
-            !interestedTour ||
-            !travelDate?.from ||
-            typeof numberOfPeople !== "number" ||
-            numberOfPeople < 1 ||
-            numberOfPeople > 50
-        ) {
-            console.error('Missing or invalid required fields:', { name, email, phone, interestedTour, travelDate, numberOfPeople });
-            return res.status(400).json({ success: false, message: 'Missing or invalid required fields.' });
+        // Enhanced validation with detailed logging
+        const validationErrors = [];
+        
+        if (!name || typeof name !== 'string' || name.trim().length === 0) {
+            validationErrors.push('Name is required');
+        }
+        
+        if (!email || typeof email !== 'string' || !email.includes('@')) {
+            validationErrors.push('Valid email is required');
+        }
+        
+        if (!phone || typeof phone !== 'string' || phone.trim().length < 10) {
+            validationErrors.push('Valid phone number is required');
+        }
+        
+        if (!interestedTour || typeof interestedTour !== 'string') {
+            validationErrors.push('Interested tour is required');
+        }
+        
+        if (!travelDate || typeof travelDate !== 'object' || !travelDate.from) {
+            validationErrors.push('Travel date is required');
+        }
+        
+        if (typeof numberOfPeople !== "number" || numberOfPeople < 1 || numberOfPeople > 100) {
+            validationErrors.push('Number of people must be between 1 and 100');
+        }
+
+        // Check if travel package is required
+        if (interestedTour === "tour-packages" && (!travelPackage || typeof travelPackage !== 'string')) {
+            validationErrors.push('Travel package is required for tour packages');
+        }
+
+        if (validationErrors.length > 0) {
+            console.error('Validation errors:', validationErrors);
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Validation failed: ' + validationErrors.join(', '),
+                errors: validationErrors
+            });
         }
 
         // Format the travel date
         let formattedDate = '';
         if (travelDate?.from) {
-            const fromDate = new Date(travelDate.from).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-
-            if (travelDate.to) {
-                const toDate = new Date(travelDate.to).toLocaleDateString('en-US', {
+            try {
+                const fromDate = new Date(travelDate.from).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric'
                 });
-                formattedDate = `${fromDate} - ${toDate}`;
-            } else {
-                formattedDate = fromDate;
+
+                if (travelDate.to) {
+                    const toDate = new Date(travelDate.to).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                    formattedDate = `${fromDate} - ${toDate}`;
+                } else {
+                    formattedDate = fromDate;
+                }
+            } catch (dateError) {
+                console.error('Date formatting error:', dateError);
+                formattedDate = 'Invalid date format';
             }
         }
 
@@ -90,30 +121,39 @@ app.post('/api/submit-enquiry', async (req, res) => {
 
         console.log('Sending email with content:', emailContent);
 
-        // Send email to admin
-        const resendResult = await resend.emails.send({
-            from: 'onboarding@resend.dev',
-            to: 'mail@spectrainfo.in',
-            subject: `New Durga Puja Tour Enquiry from ${name}`,
-            html: emailContent,
-        });
-        console.log('Resend API response (admin):', resendResult);
+        try {
+            // Send email to admin
+            const resendResult = await resend.emails.send({
+                from: 'onboarding@resend.dev',
+                to: 'mail@spectrainfo.in',
+                subject: `New Durga Puja Tour Enquiry from ${name}`,
+                html: emailContent,
+            });
+            console.log('Resend API response (admin):', resendResult);
 
-        // Send copy to user
-        const userResult = await resend.emails.send({
-            from: 'onboarding@resend.dev',
-            to: email,
-            subject: `Copy of your Durga Puja Tour Enquiry`,
-            html: `
-                <p>Dear ${name},</p>
-                <p>Thank you for your enquiry. Here is a copy of your submission:</p>
-                ${emailContent}
-                <p>We will get back to you soon!</p>
-            `,
-        });
-        console.log('Resend API response (user):', userResult);
+            // Send copy to user
+            const userResult = await resend.emails.send({
+                from: 'onboarding@resend.dev',
+                to: email,
+                subject: `Copy of your Durga Puja Tour Enquiry`,
+                html: `
+                    <p>Dear ${name},</p>
+                    <p>Thank you for your enquiry. Here is a copy of your submission:</p>
+                    ${emailContent}
+                    <p>We will get back to you soon!</p>
+                `,
+            });
+            console.log('Resend API response (user):', userResult);
 
-        res.status(200).json({ success: true, message: 'Enquiry submitted successfully!' });
+            res.status(200).json({ success: true, message: 'Enquiry submitted successfully!' });
+        } catch (emailError) {
+            console.error('Email sending error:', emailError);
+            res.status(502).json({
+                success: false,
+                message: 'Failed to send email. Please try again.',
+                error: emailError?.message || 'Email service error'
+            });
+        }
     } catch (error) {
         console.error('Error processing enquiry:', error);
         res.status(500).json({
