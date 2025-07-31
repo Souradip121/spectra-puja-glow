@@ -5,6 +5,7 @@ import cruisingintopujaImg from "@/assets/cruisingintopuja.webp";
 import durgapujaexpressImg from "@/assets/durgapujaexpress.webp";
 import riverCruiseImg from "@/assets/river-cruise.jpg";
 import previewExpressDisplayImg from "@/assets/DurgaPreviewExpressalt.png";
+import durgaLandscapeImg from "@/assets/durgadlandscape.png";
 import img1n2d from "@/assets/1n2d.webp";
 import img2n3d from "@/assets/2n3d.webp";
 import img3n4d from "@/assets/3n4d.webp";
@@ -26,7 +27,7 @@ const DurgaPujaArt2025 = () => {
       description:
         "The Durga Preview Express is a curated <span style='color: black; font-weight: 500;'>10-hour night tour</span> through Kolkata's most spectacular <span style='color: black; font-weight: 500;'>Durga Puja Art installations</span>. Travel in a <span style='color: black; font-weight: 500;'>comfortable AC coach</span>, enjoy a <span style='color: black; font-weight: 500;'>delicious dinner</span>, and explore <span style='color: black; font-weight: 500;'>10 handpicked pandals</span>. Perfect for Art lovers and festive explorers seeking a <span style='color: black; font-weight: 500;'>safe, crowd-free</span> and immersive cultural experience under the <span style='color: black; font-weight: 500;'>enchanting lights</span> of the Kolkata night.",
       features: [],
-      image: durgapujaexpressImg,
+      image: durgaLandscapeImg,
       displayImage: previewExpressDisplayImg,
     },
   ];
@@ -305,16 +306,20 @@ const DurgaPujaArt2025 = () => {
                     alt={pkg.title}
                     className="w-full h-full object-cover object-top transition-transform duration-300"
                   />
-                  {/* Date at top left */}
-                  <div className="absolute top-4 left-4 text-white">
-                    <span className="font-medium" style={{ fontSize: "16px" }}>
-                      {pkg.date}
-                    </span>
-                  </div>
-                  {/* Title at bottom - hidden on mobile */}
-                  <div className="absolute bottom-4 left-4 text-white hidden md:block">
-                    <h3 className="text-2xl font-bold">{pkg.title}</h3>
-                  </div>
+                  {/* Date at top left - hide for Durga Preview Express */}
+                  {index !== 1 && (
+                    <div className="absolute top-4 left-4 text-white">
+                      <span className="font-medium" style={{ fontSize: "16px" }}>
+                        {pkg.date}
+                      </span>
+                    </div>
+                  )}
+                  {/* Title at bottom - hidden on mobile and hide for Durga Preview Express */}
+                  {index !== 1 && (
+                    <div className="absolute bottom-4 left-4 text-white hidden md:block">
+                      <h3 className="text-2xl font-bold">{pkg.title}</h3>
+                    </div>
+                  )}
                 </div>
 
                 <CardHeader className="text-center pt-4 pb-2">
