@@ -39,7 +39,7 @@ const DurgaPujaArt2025 = () => {
         "24 contemporary installations",
         "1 Traditional Puja",
         "1 Bonedi Bari visit",
-        "Kolkata Townhall Exhibition",
+        "Autumn Art Fair at Alipore Museum",
       ],
       features: [
         "An extensive cultural deep dive into Durga Puja and Kolkata's soul",
@@ -54,7 +54,7 @@ const DurgaPujaArt2025 = () => {
         "15 contemporary installations",
         "1 Traditional Puja",
         "1 Bonedi Bari visit",
-        "Kolkata Townhall Exhibition",
+        "Autumn Art Fair at Alipore Museum",
       ],
       features: [
         "Well-rounded journey blending Art, tradition and curated experiences",
@@ -69,7 +69,7 @@ const DurgaPujaArt2025 = () => {
         "6 contemporary installations",
         "1 Traditional Puja",
         "1 Bonedi Bari visit",
-        "Kolkata Townhall Exhibition",
+        "Autumn Art Fair at Alipore Museum",
       ],
       features: [
         "A quick yet immersive glimpse into Kolkata's artistic celebrations",
@@ -309,7 +309,10 @@ const DurgaPujaArt2025 = () => {
                   {/* Date at top left - hide for Durga Preview Express */}
                   {index !== 1 && (
                     <div className="absolute top-4 left-4 text-white">
-                      <span className="font-medium" style={{ fontSize: "16px" }}>
+                      <span
+                        className="font-medium"
+                        style={{ fontSize: "16px" }}
+                      >
                         {pkg.date}
                       </span>
                     </div>
