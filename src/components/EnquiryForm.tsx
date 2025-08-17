@@ -430,9 +430,9 @@ const EnquiryForm = () => {
                         <SelectItem value="tour-packages">
                           Travel Packages
                         </SelectItem>
-                        <SelectItem value="cruising-through-puja">
+                        {/* <SelectItem value="cruising-through-puja">
                           Cruising Into Puja
-                        </SelectItem>
+                        </SelectItem> */}
                         <SelectItem value="durga-preview-express">
                           Durga Preview Express
                         </SelectItem>

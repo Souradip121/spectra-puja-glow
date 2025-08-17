@@ -13,15 +13,6 @@ import img3n4d from "@/assets/3n4d.webp";
 const DurgaPujaArt2025 = () => {
   const specialPackages = [
     {
-      title: "CRUISING INTO PUJA -A MAHALAYA SPECIAL",
-      date: "21 September 2025",
-      description:
-        "Set sail on a heritage-filled cruise along the Hooghly aboard <span style='color: black; font-weight: 500;'>India's last surviving paddle steamer</span>. Enjoy <span style='color: black; font-weight: 500;'>folk performances</span>, <span style='color: black; font-weight: 500;'>storytelling</span>, <span style='color: black; font-weight: 500;'>Bengali cuisine</span>, and a visit to the <span style='color: black; font-weight: 500;'>Riverine Museum</span>. With cultural games, <span style='color: black; font-weight: 500;'>Puja-themed AV showcases</span> and the festive rhythm of <span style='color: black; font-weight: 500;'>Dhakis</span>, this unique experience captures the sights, sound and spirit of Durga Puja—right on the river.",
-      features: [],
-      image: cruisingintopujaImg,
-      displayImage: riverCruiseImg,
-    },
-    {
       title: "DURGA PREVIEW EXPRESS",
       date: "19 to 22 September 2025",
       description:
@@ -283,21 +274,19 @@ const DurgaPujaArt2025 = () => {
           ))}
         </div>
 
-        {/* Special Packages - 2 cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        {/* Special Packages - 1 centered card */}
+        <div className="flex justify-center max-w-4xl mx-auto">
           {specialPackages.map((pkg, index) => (
-            <div key={index} className="flex flex-col">
+            <div key={index} className="flex flex-col w-full md:w-96">
               {/* Mobile-only heading for each card */}
               <div className="md:hidden text-center mb-4">
                 <h3 className="text-2xl font-semibold text-foreground">
-                  {index === 0 ? "CRUISING INTO PUJA" : "DURGA PREVIEW EXPRESS"}
+                  DURGA PREVIEW EXPRESS
                 </h3>
               </div>
 
               <Card
-                id={
-                  index === 0 ? "cruising-into-puja" : "durga-preview-express"
-                }
+                id="durga-preview-express"
                 className="flex flex-col overflow-hidden hover:shadow-xl transition-all duration-300 h-full"
               >
                 <div className="relative h-48 w-full overflow-hidden">
@@ -306,23 +295,6 @@ const DurgaPujaArt2025 = () => {
                     alt={pkg.title}
                     className="w-full h-full object-cover object-top transition-transform duration-300"
                   />
-                  {/* Date at top left - hide for Durga Preview Express */}
-                  {index !== 1 && (
-                    <div className="absolute top-4 left-4 text-white">
-                      <span
-                        className="font-medium"
-                        style={{ fontSize: "16px" }}
-                      >
-                        {pkg.date}
-                      </span>
-                    </div>
-                  )}
-                  {/* Title at bottom - hidden on mobile and hide for Durga Preview Express */}
-                  {index !== 1 && (
-                    <div className="absolute bottom-4 left-4 text-white hidden md:block">
-                      <h3 className="text-2xl font-bold">{pkg.title}</h3>
-                    </div>
-                  )}
                 </div>
 
                 <CardHeader className="text-center pt-4 pb-2">
@@ -371,5 +343,6 @@ const DurgaPujaArt2025 = () => {
     </section>
   );
 };
+
 
 export default DurgaPujaArt2025;

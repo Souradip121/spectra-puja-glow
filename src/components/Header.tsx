@@ -104,14 +104,14 @@ const Header = () => {
                 >
                   → Exclusive Travel Packages
                 </a>
-                <a
+                {/* <a
                   href="#cruising-into-puja"
                   className="block text-sm hover:text-primary transition-colors"
                   style={{ color: "#00BFFF" }}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   → Cruising Into Puja
-                </a>
+                </a> */}
                 <a
                   href="#durga-preview-express"
                   className="block text-sm hover:text-primary transition-colors"
