@@ -5,7 +5,7 @@ import cruisingintopujaImg from "@/assets/cruisingintopuja.webp";
 import durgapujaexpressImg from "@/assets/durgapujaexpress.webp";
 import riverCruiseImg from "@/assets/river-cruise.jpg";
 import previewExpressDisplayImg from "@/assets/DurgaPreviewExpressalt.png";
-import durgaLandscapeImg from "@/assets/durgadlandscape.png";
+import durgaLandscapeImg from "@/assets/spectra_distric_example_final.webp";
 import img1n2d from "@/assets/1n2d.webp";
 import img2n3d from "@/assets/2n3d.webp";
 import img3n4d from "@/assets/3n4d.webp";
@@ -324,7 +324,7 @@ const DurgaPujaArt2025 = () => {
                     className="w-full text-white"
                     style={{ backgroundColor: "#fdd835" }}
                     size="lg"
-                    onClick={() => window.open(pkg.displayImage, "_blank")}
+                    onClick={() => window.open("https://link.district.in/DSTRKT/sfeon7n8", "_blank")}
                     onMouseEnter={(e) =>
                       (e.target.style.backgroundColor = "#f9c11d")
                     }
@@ -332,7 +332,7 @@ const DurgaPujaArt2025 = () => {
                       (e.target.style.backgroundColor = "#fdd835")
                     }
                   >
-                    View Now
+                    Book Now
                   </Button>
                 </CardContent>
               </Card>
@@ -343,6 +343,5 @@ const DurgaPujaArt2025 = () => {
     </section>
   );
 };
-
 
 export default DurgaPujaArt2025;
